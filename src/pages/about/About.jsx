@@ -5,6 +5,13 @@ import {
     CarOutlined, SafetyOutlined, HeartOutlined
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+
+import BackgroundImage from '@/ui/background/BackgroundImage.jsx';
+import { backgrounds } from '@/data/backgrounds.js';
+
+import aboutUA from '@/data/json/AboutUs.json';
+import aboutEN from '@/data/json/AboutUs.en.json';
+
 import s from './About.module.scss';
 
 const { Title, Paragraph, Text } = Typography;
@@ -44,16 +51,9 @@ const BrandChips = React.memo(({ title, names = [] }) => {
 export default function About() {
     const { i18n } = useTranslation();
 
-    // Автоматичний вибір файлу даних: AboutUs.en.json → для en, інакше AboutUs.json
     const about = React.useMemo(() => {
-        // Збираємо всі JSON, що відповідають патерну
-        const files = import.meta.glob('../../data/AboutUs*.json', { eager: true, import: 'default' });
-        const hasEN = files['../../data/AboutUs.en.json'];
-        if (i18n.language?.toLowerCase().startsWith('en') && hasEN) {
-            return hasEN;
-        }
-        // дефолт — український файл
-        return files['../../data/AboutUs.json'] || {};
+        const lang = (i18n.language || '').toLowerCase();
+        return lang.startsWith('en') ? (aboutEN || {}) : (aboutUA || {});
     }, [i18n.language]);
 
     const title    = about?.title || '';
@@ -79,9 +79,9 @@ export default function About() {
             : '');
 
     const blocks = [
-        sec?.history && { key: 'history',     title: tt?.history,     icon: <HistoryOutlined />, text: sec.history },
-        growthText   && { key: 'growth',      title: tt?.growth,      icon: <RocketOutlined />,  text: growthText },
-        regions.length > 0 && { key: 'brands', title: tt?.brands,      icon: <TagsOutlined />,   text: sec.exclusive_region },
+        sec?.history && { key: 'history', title: tt?.history, icon: <HistoryOutlined />, text: sec.history },
+        growthText   && { key: 'growth',  title: tt?.growth,  icon: <RocketOutlined />,  text: growthText },
+        regions.length > 0 && { key: 'brands', title: tt?.brands, icon: <TagsOutlined />, text: sec.exclusive_region },
         sec?.distribution && { key: 'distribution', title: tt?.distribution, icon: <TagsOutlined />, text: sec.distribution },
         sec?.logistics &&    { key: 'logistics',    title: tt?.logistics,    icon: <CarOutlined />,    text: sec.logistics },
         sec?.quality &&      { key: 'quality',      title: tt?.quality,      icon: <SafetyOutlined />, text: sec.quality },
@@ -95,9 +95,14 @@ export default function About() {
     ].filter(Boolean);
 
     return (
-        <main className={s.page}>
-            {/* FULLSCREEN HERO без зображень */}
+        <main
+            className={s.page}
+            /* ⬇️ тепер 200px */
+            style={{ '--hero-shift': '200px', '--content-shift': '200px' }}
+        >
+            {/* HERO з фоном */}
             <section className={s.hero} aria-labelledby="about-title">
+                <BackgroundImage {...backgrounds.about} />
                 <div className={s.heroBg} aria-hidden />
                 <div className={s.heroGlass}>
                     <div className={s.heroInner}>
@@ -118,8 +123,8 @@ export default function About() {
                         <Title level={2} id="brands-summary-title" className={s.h2}>
                             {labels?.brands_summary_title || 'Бренди та партнерства'}
                         </Title>
-                        <BrandChips title={labels?.own || 'Власні ТМ'}     names={own} />
-                        <BrandChips title={labels?.ua || 'Ексклюзивні ТМ в Україні'}      names={ua} />
+                        <BrandChips title={labels?.own || 'Власні ТМ'} names={own} />
+                        <BrandChips title={labels?.ua || 'Ексклюзивні ТМ в Україні'} names={ua} />
                         <BrandChips title={labels?.regions || 'Ексклюзивні ТМ у регіонах'} names={regions} />
                         {note && <Para className={s.note}>{note}</Para>}
                     </section>

@@ -1,4 +1,7 @@
-.layout { min-height: 100svh; background: #fff; }
+.layout {
+  min-height: 100svh;
+  background: transparent;
+}
 
 /* базовий контейнер для звичайних сторінок */
 .content {
@@ -7,18 +10,17 @@
   padding: 32px 0 64px;
 }
 
-/* 🔸 повна ширина сторінки (герої/банери) */
-.content--flush {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;              /* банер впирається у краї */
-}
-
-/* опціонально: якщо потрібен тільки зверху без відступу, знизу лишити */
+/* повна ширина (герої/банери) */
+.content--flush,
 .content--flushTop {
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0 0 64px;
+}
+.content--flush { padding: 0; }
+.content--flushTop { padding: 0 0 64px; }
+
+@media (max-width: 576px) {
+  .content { padding: 20px 0 48px; }
+  .content--flushTop { padding-bottom: 48px; }
 }

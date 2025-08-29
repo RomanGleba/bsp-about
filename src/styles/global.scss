@@ -6,13 +6,27 @@
 *::before,
 *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root { --header-h: 0px; } /* дефолт, поки не поставив компонент */
+/* узгоджені змінні */
+:root {
+  --header-h: 0px;
+  --hero-shift: 0px;
+  --content-shift: 0px;
+}
 
 html, body, #root { height: 100%; }
-html, body { overflow-x: hidden; scroll-behavior: smooth; }
 
-/* Вимикаємо вертикальний скрол лише там, де потрібно (вмикає сторінка) */
-body.no-scroll { overflow-y: hidden; }
+/* без горизонтального скролу, плавний скрол */
+html, body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: none;
+}
+
+/* блокування вертикального скролу за необхідності */
+body.no-scroll {
+  overflow-y: hidden;
+  overscroll-behavior-y: contain;
+}
 
 /* ---------- Typography / Body ---------- */
 body {
@@ -25,53 +39,40 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Медіадані не виходять за межі контейнера */
-img, picture, svg, video, canvas {
-  display: block;
-  max-width: 100%;
-}
+/* Медіа не виходять за межі */
+img, picture, svg, video, canvas { display: block; max-width: 100%; }
 
 /* Видимий фокус */
 a, button, [role="button"] { outline: none; }
-:focus-visible { outline: 3px solid rgba(22, 163, 74, .85); outline-offset: 2px; }
+:focus-visible { outline: 3px solid rgba(22,163,74,.85); outline-offset: 2px; }
 
 /* ---------- Ant Layout ---------- */
 .ant-layout,
-.ant-layout-content {
-  padding: 0 !important;
-  margin: 0 !important;
-  background: transparent !important;
-}
+.ant-layout-content { padding: 0 !important; margin: 0 !important; background: transparent !important; }
 .ant-layout-header { margin: 0 !important; border: 0 !important; }
 
-/* Щоб full-bleed елементи могли виходити за контентний контейнер */
+/* full-bleed елементи можуть виходити за контейнер */
 .ant-layout, .ant-layout-content, main { overflow: visible !important; }
 
 /* ---------- Utilities ---------- */
 .container { @include m.container; }
 
-/* ГЛОБАЛЬНИЙ full-bleed — застосовується в розмітці (щоб не було миготіння) */
+/* глобальна утиліта full-bleed */
 .full-bleed {
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100svw;
+  left: 50%; right: 50%;
+  margin-left: -50svw; margin-right: -50svw;
 
   @supports (transform: translateX(1px)) {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 0; margin-right: 0;
     transform: translateX(calc(50vw - 50%));
   }
 }
 
-/* для screen-reader */
+/* screen-reader only */
 .sr-only {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0);
-  white-space: nowrap; border: 0;
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
 }
 
 /* повага до налаштувань користувача */

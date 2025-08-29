@@ -1,41 +1,32 @@
-import React from 'react';
-import style from './Background.module.scss';
+// BackgroundImage.jsx
+import React from "react";
+import style from "./Background.module.scss";
 
-export default function BackgroundImage() {
+export default function BackgroundImage({
+                                            mobileWebp,
+                                            mobileJpg,
+                                            tabletWebp,
+                                            tabletJpg,
+                                            desktopWebp,
+                                            desktopJpg,
+                                            alt,
+                                        }) {
     return (
         <picture className={style.bgWrap}>
             {/* mobile */}
-            <source
-                media="(max-width: 767px)"
-                srcSet="/images/backgrounds/mobile/dogs-mobile.webp"
-                type="image/webp"
-            />
-            <source
-                media="(max-width: 767px)"
-                srcSet="/images/backgrounds/mobile/dogs-mobile.jpg"
-            />
+            <source media="(max-width: 767px)" srcSet={mobileWebp} type="image/webp" />
+            <source media="(max-width: 767px)" srcSet={mobileJpg} />
 
             {/* tablet */}
-            <source
-                media="(max-width: 1199px)"
-                srcSet="/images/family-dog-tablet.webp"
-                type="image/webp"
-            />
-            <source
-                media="(max-width: 1199px)"
-                srcSet="/images/family-dog-tablet.jpg"
-            />
+            <source media="(max-width: 1199px)" srcSet={tabletWebp} type="image/webp" />
+            <source media="(max-width: 1199px)" srcSet={tabletJpg} />
 
             {/* desktop */}
-            <source
-                media="(min-width: 1200px)"
-                srcSet="/images/backgrounds/desktop/dogs-desktop.webp"
-                type="image/webp"
-            />
+            <source media="(min-width: 1200px)" srcSet={desktopWebp} type="image/webp" />
 
             <img
-                src="/images/backgrounds/desktop/family-dog-desktop.jpg"
-                alt="Сім'я з собаками на природі — BSP Group"
+                src={desktopJpg}
+                alt={alt}
                 className={style.bg}
                 loading="eager"
                 fetchPriority="high"
@@ -44,4 +35,3 @@ export default function BackgroundImage() {
         </picture>
     );
 }
-

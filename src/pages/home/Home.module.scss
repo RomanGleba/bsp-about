@@ -1,10 +1,8 @@
 $accent: #16a34a;
 
-/* HERO: фулскрін без скролу */
+/* HERO: фулскрін */
 .hero {
   position: relative;
-
-  /* базові декларації йдуть ПЕРЕД вкладеними правилами */
   width: 100vw;
   overflow: hidden;
   display: flex;
@@ -14,19 +12,20 @@ $accent: #16a34a;
   isolation: isolate;
   box-sizing: border-box;
 
-  /* висота за замовчуванням */
+  /* висота з урахуванням хедера */
   height: calc(100svh - var(--header-h, 0px));
-
-  /* альтернативи — лише вкладені правила (після них немає декларацій) */
   @supports not (height: 100svh) {
     height: calc(100dvh - var(--header-h, 0px));
   }
   @supports not (height: 100dvh) {
     height: calc(100vh - var(--header-h, 0px));
   }
+
+  /* підстраховка від білого миготіння під час overscroll */
+  background: #000;
 }
 
-/* фон (якщо рендериш <img/> в HeroImage — залишаємо місце) */
+/* ці класи використовує BackgroundImage.module.scss, але підстрахуємо тут */
 .bgWrap { position: absolute; inset: 0; z-index: 0; }
 .bg {
   position: absolute; inset: 0;
@@ -35,7 +34,7 @@ $accent: #16a34a;
   transform: translateZ(0);
 }
 
-/* затемнення для контрасту */
+/* overlay для контрасту */
 .overlay {
   position: absolute; inset: 0; z-index: 0;
   background: linear-gradient(to bottom right, rgba(0,0,0,.45), rgba(0,0,0,.25));
@@ -55,14 +54,12 @@ $accent: #16a34a;
 /* типографіка */
 .kickerWrap { display: flex; flex-direction: column; align-items: flex-start; }
 
-/* робимо як звичайний тонкий текст */
 .kicker {
   color: #fff !important;
   font-size: clamp(1.1rem, 1vw + 1rem, 1.6rem);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  opacity: 1;
 }
 .kickerLine {
   width: 46px; height: 3px; background: $accent;
@@ -96,7 +93,9 @@ $accent: #16a34a;
 
 /* підвищений контраст */
 @media (prefers-contrast: more) {
-  .overlay { background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.45)); }
+  .overlay {
+    background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.45));
+  }
 }
 
 /* мобільний тюнінг */

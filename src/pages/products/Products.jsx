@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Divider } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-import data from '@/data/Products.json';
+import data from '@/data/json/Products.json';
 import ProductCard from '@/components/productCard/ProductCard.jsx';
 import ResponsiveBanner from '@/ui/background/ResponsiveBanner.jsx';
 import s from './Products.module.scss';

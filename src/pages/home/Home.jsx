@@ -3,7 +3,10 @@ import { Button, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { RightOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+
 import BackgroundImage from '@/ui/background/BackgroundImage.jsx';
+import { backgrounds } from '@/data/backgrounds.js';
+
 import s from './Home.module.scss';
 
 export default function Home() {
@@ -18,7 +21,7 @@ export default function Home() {
             document.querySelector('#navbar');
 
         const h = header ? header.getBoundingClientRect().height : 0;
-        document.documentElement.style.setProperty('--navbar-h', `${Math.round(h)}px`);
+        document.documentElement.style.setProperty('--header-h', `${Math.round(h)}px`);
 
         document.body.classList.add('no-scroll');
         return () => document.body.classList.remove('no-scroll');
@@ -26,7 +29,10 @@ export default function Home() {
 
     return (
         <section className={s.hero} aria-labelledby="hero-title">
-            <BackgroundImage />
+            {/* фон */}
+            <BackgroundImage {...backgrounds.home} />
+
+            {/* затемнення для контрасту */}
             <div className={s.overlay} aria-hidden="true" />
 
             <div className={s.inner}>

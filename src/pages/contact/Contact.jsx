@@ -7,11 +7,11 @@ import s from './Contact.module.scss';
 
 const { Title, Paragraph, Text } = Typography;
 
-// TODO: заміни на реальні дані
+
 const CONTACTS = {
-    phone: '+380 00 000 00 00 ТУТ БУДЕ ЧИЇСЬ Номер',
+    phone: '+380979445353',
     email: 'info@bsp-group.ua ',
-    address: 'Україна, Закарпатська.обл, Ужгород ',
+    address: 'Україна, Закарпатська обл., м. Ужгород, вул. Трудова, 2 ',
     instagramLabel: 'Instagram',
 };
 
