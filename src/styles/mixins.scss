@@ -1,0 +1,13 @@
+@use './vars' as v;
+
+@mixin container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+@mixin card {
+  border: 1px solid #eee;
+  padding: 24px;
+  border-radius: v.$radius;
+  background: #fff;
+}

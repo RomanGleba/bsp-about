@@ -1,0 +1,6 @@
+{
+  "products": [
+    { "id": "food", "name": "Dasty сухий корм 10 кг", "image": "Dasty-Beaf" },
+    { "id": "food2", "name": "Dasty Вологий корм 10 кг", "image": "Dasty-banka" }
+  ]
+}

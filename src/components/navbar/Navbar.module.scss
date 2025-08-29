@@ -1,0 +1,133 @@
+/* ==================== Navbar.module.scss ==================== */
+$lg: 992px;  // desktop breakpoint
+$md: 768px;  // tablets
+$sm: 576px;  // phones
+$xs: 400px;  // very small phones
+$xxs: 340px; // SE/mini
+
+/* Палітра */
+$green: #16a34a;        /* primary */
+$green-600: #15803d;    /* hover */
+$mint: #e8f7ee;         /* soft bg */
+
+/* ====== HEADER / NAVBAR ====== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #f8f9fa;
+  backdrop-filter: blur(8px) saturate(140%);
+  border-bottom: 1px solid rgba(0,0,0,.05);
+  transition: background .2s ease, box-shadow .2s ease;
+}
+.scrolled { background: #f1f1f1; box-shadow: 0 10px 24px rgba(0,0,0,.06); }
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 16px;
+
+  @media (max-width: $md) { height: 60px; padding: 0 12px; gap: 12px; }
+  @media (max-width: $sm) { height: 56px; padding: 0 10px; gap: 10px; }
+}
+
+/* ====== LOGO ====== */
+.logo { display: inline-flex; align-items: center; line-height: 0; }
+.logoShift { transform: translate(-10px, 20px); } /* ◀️ вліво на 10px і вниз на 10px */
+.logo .logoImg { display: block; }
+
+/* ====== DESKTOP NAV ====== */
+.navDesktop { flex: 1; display: none; margin-left: 8px; @media (min-width: $lg) { display: block; } }
+
+.menu { display: flex; gap: 10px; align-items: center; list-style: none; margin: 0; padding: 0; }
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  min-width: 112px; /* стабільність ширини для різних мов */
+  color: #222;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: color .15s ease, background .15s ease;
+  white-space: nowrap;
+}
+.navLink:hover { color: $green; background: #eef3f0; }
+.navLinkActive { color: $green; background: #eaf3ee; }
+
+/* ====== ACTIONS ====== */
+.actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+
+/* Показувати лише на десктопі */
+.onlyDesktop { display: flex; align-items: center; gap: 10px; }
+@media (max-width: $lg) { .onlyDesktop { display: none; } }
+
+/* Instagram button */
+.iconBtn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 999px;
+  color: $green; background: $mint; box-shadow: inset 0 0 0 1px rgba(22,163,74,.18);
+}
+
+/* CTA */
+.cta {
+  background: $green !important;
+  border-color: $green !important;
+}
+.cta :global(.ant-btn) { min-width: 140px; }
+.burger :global(.ant-btn) { width: 40px; height: 40px; }
+@media (min-width: $lg) { .burger { display: none; } }
+
+/* ====== MOBILE FULLSCREEN MENU ====== */
+.sidebar {
+  position: fixed; inset: 0; width: 100vw; height: 100vh;
+  background: rgba(255,255,255,0.95);      /* білий, трохи затемнений */
+  backdrop-filter: blur(6px);              /* м’яке «молочне» скло */
+  transform: translateX(100%);
+  transition: transform .3s ease;
+  z-index: 999;
+  display: flex; flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.open { transform: translateX(0); }
+
+.sidebarHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,.08);
+
+  .logoImg { width: 120px; height: 28px; }
+}
+
+.sidebarNav {
+  padding: 20px 0;
+  ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+  a {
+    display: block; padding: 14px; border-radius: 12px; font-size: 18px; font-weight: 500;
+    text-decoration: none; color: #222; background: #fff;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04);
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  a:hover { background: #f3f6f4; color: $green; }
+  .navLinkActive { background: #eaf3ee; color: $green; box-shadow: 0 0 0 1px rgba(22,163,74,.15) inset; }
+}
+
+.sidebarFooter {
+  margin-top: auto; display: flex; align-items: center; gap: 12px;
+  padding-top: 16px; border-top: 1px solid rgba(0,0,0,.08);
+}
+
+/* very small phones */
+@media (max-width: $xs) {
+  .cta :global(.ant-btn .ant-btn-icon) { margin-inline-end: 0; }
+  .cta :global(.ant-btn > span:not(.ant-btn-icon)) { display: none; }
+  .cta :global(.ant-btn) { width: 36px; padding: 0; border-radius: 999px; }
+}

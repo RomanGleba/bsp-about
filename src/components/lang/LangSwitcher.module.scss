@@ -1,0 +1,28 @@
+/* фіксована ширина свічера, щоб не скакало при UA ↔ ENG */
+.switcher :global(.ant-segmented) {
+  width: 128px;                 /* підганяй за дизайном */
+}
+
+/* зробити елементи однакової ширини */
+.switcher :global(.ant-segmented-group) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* дві рівні колонки */
+}
+
+.switcher :global(.ant-segmented-item) {
+  justify-content: center;
+}
+
+/* сам текст всередині — без впливу на ширину */
+.opt {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+/* трохи косметики */
+.switcher :global(.ant-segmented-item-selected) {
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}

@@ -1,0 +1,61 @@
+{
+  "title": "About BSP Group",
+  "lead": "Official importer, manufacturer and distributor of pet products in Ukraine since 2020.",
+  "slogan": "BSP GROUP — CARING TOGETHER",
+  "position": "One of the largest distributors of pet products in Ukraine",
+
+  "stats": [
+    { "label": "Founded", "value": "2020" },
+    { "label": "Own brands", "value": "2" },
+    { "label": "Exclusive brands", "value": "10+" },
+    { "label": "SKU", "value": "1000+" }
+  ],
+
+  "brands": {
+    "own": ["Dasty", "Spiky"],
+    "exclusive_ukraine": ["Finci", "Cattos", "Pretty Cat", "Thor"],
+    "exclusive_region": [
+      "HealthyPet",
+      "Hidog",
+      "Nutra 5 Stars",
+      "Exclusion",
+      "Quattro",
+      "Nature’s Protection",
+      "Healthy Snack",
+      "AlfPet",
+      "Miss Kis"
+    ],
+    "distributed_note": "We have over 1000 SKUs in total. We also distribute other brands across Ukraine and in Zakarpattia."
+  },
+
+  "sections": {
+    "labels": {
+      "brands_summary_title": "Brands & Partnerships",
+      "own": "Own Brands",
+      "ua": "Exclusive Brands in Ukraine",
+      "regions": "Exclusive Brands in Regions"
+    },
+
+    "titles": {
+      "history": "History",
+      "growth": "Growth Despite Challenges",
+      "brands": "Our Brands / SKUs",
+      "distribution": "Distribution",
+      "logistics": "Logistics Without Borders",
+      "quality": "Quality & Certification",
+      "gratitude": "Gratitude"
+    },
+
+    "history": "BSP Group is an official importer, manufacturer, and distributor of pet products. The company was founded in 2020. Despite the pandemic, the war, and crises, it has continued to grow.",
+    "brands_intro": "Today we have 2 own brands (Dasty, Spiky) and exclusive brands (Finci, Cattos, Pretty Cat, Thor) for all of Ukraine and Zakarpattia.",
+    "exclusive_region": "We hold exclusive distribution rights in Zakarpattia: TM HealthyPet, TM Hidog, Nutra 5 Stars, Exclusion, Quattro, Nature’s Protection, Healthy Snack, AlfPet, Miss Kis. Over 1000 SKUs in total.",
+    "distribution": "We cooperate with retail chains, distributors, wholesale and retail clients. In certain regions, we have exclusive partners.",
+    "logistics": "We have built professional logistics that enable fast and cost-efficient deliveries to every corner of Ukraine — from a single bag to tens of tons.",
+    "quality": "All products are verified and have quality certificates.",
+    "position": "Today we are one of the largest distributors of pet products in Ukraine.",
+    "promise": "We can meet the needs of any customer.",
+    "gratitude_partners": "We are grateful to everyone for the cooperation and work every day for our current and future partners.",
+    "gratitude_army": "We thank the Armed Forces of Ukraine for the opportunity to work and for safety.",
+    "patriotism": "Glory to Ukraine!"
+  }
+}

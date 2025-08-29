@@ -1,0 +1,35 @@
+{
+  "header": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "contacts": "Contacts",
+    "contact": "Contact"
+  },
+  "home": {
+    "slogan": "BSP GROUP — Caring Together",
+    "headline": "You know your pet, we know how to feed them",
+    "lead": "We are the official importer and distributor of high-quality products from the EU.",
+    "cta_products": "View Products",
+    "cta_about": "Learn More",
+    "features": {
+      "fast": "Fast Delivery",
+      "assortment": "Wide Assortment",
+      "coverage": "Nationwide Coverage"
+    }
+  },
+  "products": {
+    "title": "Our Products",
+    "lead": "We import and distribute quality pet products from leading EU and Ukrainian brands.",
+    "own": "Own Brands",
+    "exclusive_ua": "Exclusive in Ukraine",
+    "exclusive_region": "Exclusive by Regions",
+    "cta_partner": "Become a Partner",
+    "cta_contact": "Contact Us",
+    "badge": { "own": "Own Brand", "ua": "Exclusive UA", "region": "Exclusive Regions" }
+  },
+  "contacts": {
+    "title": "Contacts",
+    "form": { "name": "Your name", "email": "Email", "message": "Message", "send": "Send" }
+  }
+}
