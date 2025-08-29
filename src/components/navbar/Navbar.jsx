@@ -16,15 +16,18 @@ export default function Navbar() {
     const [open, setOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
-    const navItems = useMemo(() => ([
-        { key: '/',         label: t('header.home'),     to: '/' },
-        { key: '/products', label: t('header.products'), to: '/products' },
-    ]), [t]);
+    const navItems = useMemo(
+        () => [
+            { key: '/',         label: t('header.home'),     to: '/' },
+            { key: '/products', label: t('header.products'), to: '/products' },
+        ],
+        [t],
+    );
 
     const activeKey = useMemo(() => {
         const match = navItems
-            .map(i => i.key)
-            .filter(k => pathname === k || pathname.startsWith(k + '/'))
+            .map((i) => i.key)
+            .filter((k) => pathname === k || pathname.startsWith(k + '/'))
             .sort((a, b) => b.length - a.length)[0];
         return match || '/';
     }, [pathname, navItems]);
@@ -36,7 +39,7 @@ export default function Navbar() {
         return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
-    // блокувати скрол сторінки, коли меню відкрите
+    // блокувати скрол сторінки, коли відкрите меню
     useEffect(() => {
         const prev = document.body.style.overflow;
         document.body.style.overflow = open ? 'hidden' : prev || '';
@@ -63,7 +66,7 @@ export default function Navbar() {
                 {/* Desktop navigation */}
                 <nav className={s.navDesktop} aria-label="Головна навігація">
                     <ul className={s.menu}>
-                        {navItems.map(i => (
+                        {navItems.map((i) => (
                             <li key={i.key}>
                                 <NavLink
                                     to={i.to}
@@ -78,9 +81,9 @@ export default function Navbar() {
                     </ul>
                 </nav>
 
-                {/* Actions */}
+                {/* Actions (праворуч) */}
                 <div className={s.actions}>
-                    {/* Показуємо ТІЛЬКИ на десктопі */}
+                    {/* тільки на десктопі */}
                     <div className={s.onlyDesktop}>
                         <LangSwitcher />
                         <InstagramLink className={s.iconBtn} size={22} />
@@ -92,6 +95,7 @@ export default function Navbar() {
                         className={s.cta}
                         icon={<PhoneOutlined />}
                         onClick={toContacts}
+                        aria-label={t('header.contact')}
                     >
                         {t('header.contact')}
                     </Button>
@@ -100,7 +104,7 @@ export default function Navbar() {
                         className={s.burger}
                         type="text"
                         icon={<MenuOutlined />}
-                        aria-label="Відкрити меню"
+                        aria-label={t('header.menu') || 'Меню'}
                         onClick={() => setOpen(true)}
                     />
                 </div>
@@ -114,7 +118,7 @@ export default function Navbar() {
                 aria-label={t('header.menu') || 'Меню'}
             >
                 <div className={s.sidebarHeader}>
-                    <Link to="/" className={s.logo} onClick={() => setOpen(false)}>
+                    <Link to="/" className={s.logo} onClick={() => setOpen(false)} aria-label="На головну">
                         <Logo width={130} height={36} compact />
                     </Link>
                     <Button
@@ -125,9 +129,25 @@ export default function Navbar() {
                     />
                 </div>
 
+                {/* верхній ряд дій: UA/ENG • Instagram • CTA */}
+                <div className={s.sidebarTop}>
+                    <LangSwitcher />
+                    <InstagramLink className={s.iconBtn} size={22} />
+                    <Button
+                        type="primary"
+                        shape="round"
+                        className={s.cta}
+                        icon={<PhoneOutlined />}
+                        onClick={() => { setOpen(false); toContacts(); }}
+                        aria-label={t('header.contact')}
+                    >
+                        {t('header.contact')}
+                    </Button>
+                </div>
+
                 <nav className={s.sidebarNav} aria-label="Мобільна навігація">
                     <ul>
-                        {navItems.map(i => (
+                        {navItems.map((i) => (
                             <li key={i.key}>
                                 <NavLink
                                     to={i.to}
@@ -142,21 +162,6 @@ export default function Navbar() {
                         ))}
                     </ul>
                 </nav>
-
-                <div className={s.sidebarFooter}>
-                    {/* На мобілці — тут */}
-                    <LangSwitcher />
-                    <InstagramLink className={s.iconBtn} size={22} />
-                    <Button
-                        type="primary"
-                        shape="round"
-                        className={s.cta}
-                        icon={<PhoneOutlined />}
-                        onClick={() => { setOpen(false); toContacts(); }}
-                    >
-                        {t('header.contact')}
-                    </Button>
-                </div>
             </aside>
         </header>
     );
