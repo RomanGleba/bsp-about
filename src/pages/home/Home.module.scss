@@ -3,27 +3,34 @@ $accent: #16a34a;
 /* HERO: фулскрін */
 .hero {
   position: relative;
+  box-sizing: border-box;
+
+  /* базові декларації йдуть ПЕРЕД вкладеними правилами */
   width: 100vw;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
   isolation: isolate;
-  box-sizing: border-box;
 
-  /* висота з урахуванням хедера */
-  height: calc(100svh - var(--header-h, 0px));
+  color: #fff;
+  background: #000;               /* ← тут лишаємо, щоби не було mixed-decls */
+  height: calc(100svh - var(--header-h, 0px)); /* висота з урахуванням хедера */
+
+  /* легка підстраховка від overscroll-флікера */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+
+  /* ↓↓↓ вкладені правила ТІЛЬКИ після звичайних декларацій ↓↓↓ */
   @supports not (height: 100svh) {
     height: calc(100dvh - var(--header-h, 0px));
   }
   @supports not (height: 100dvh) {
     height: calc(100vh - var(--header-h, 0px));
   }
-
-  /* підстраховка від білого миготіння під час overscroll */
-  background: #000;
 }
+
 
 /* ці класи використовує BackgroundImage.module.scss, але підстрахуємо тут */
 .bgWrap { position: absolute; inset: 0; z-index: 0; }

@@ -1,6 +1,6 @@
 {
   "products": [
-    { "id": "food", "name": "Dasty сухий корм 10 кг", "image": "Dasty-Beaf" },
-    { "id": "food2", "name": "Dasty Вологий корм 10 кг", "image": "Dasty-banka" }
+    { "id": "p1", "name": "Dasty Beef 400g", "brand": "Dasty", "image": "Dasty-Beaf" },
+    { "id": "p2", "name": "Dasty Chicken 400g", "brand": "Dasty", "image": "Dasty-banka" }
   ]
 }

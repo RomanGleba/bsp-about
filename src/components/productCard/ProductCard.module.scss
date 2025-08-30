@@ -1,4 +1,4 @@
-/* Тонкі змінні, щоб легше крутити тему */
+/* src/components/productCard/ProductCard.module.scss */
 :root {
   --card-radius: 16px;
   --card-shadow: 0 10px 30px rgba(0, 0, 0, .08);
@@ -11,34 +11,34 @@
   border-radius: var(--card-radius);
   box-shadow: var(--card-shadow);
   border: var(--card-border);
-  cursor: default;                /* не клікабельна */
-  transition: transform .18s ease, box-shadow .18s ease;
+  cursor: pointer; /* було default */
+  transition: transform .18s ease, box-shadow .18s ease, outline-color .18s ease;
 
-  /* Легка реакція на ховер без «кнопковості» */
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 14px 36px rgba(0, 0, 0, .10);
   }
+
+  &:focus-visible {
+    outline: 2px solid #16a34a; /* акцентний фокус */
+    outline-offset: 2px;
+  }
 }
 
-/* Рівне медіа-поле, щоб усі картки були однакові на різних рядках */
+/* решта без змін ... */
 .media {
   background: var(--media-bg);
   border-radius: 12px;
   padding: clamp(10px, 1.5vw, 16px);
   margin-bottom: 12px;
-
-  /* мін-висота адаптивна — картки не «стрибають» */
   min-height: clamp(180px, 26vw, 240px);
 
-  /* внутрішній контейнер центрує картинку */
   .mediaInner {
     display: grid;
     place-items: center;
     height: 100%;
   }
 
-  /* зображення з ProductImage — обмежуємо, щоб не вилазило */
   :global(picture), :global(img) {
     max-width: 100%;
   }
@@ -46,8 +46,6 @@
   :global(img) {
     user-select: none;
     -webkit-user-drag: none;
-    /* якщо твоє ProductImage не задає object-fit, можна додати:
-       object-fit: contain; max-height: 100%; */
   }
 }
 
@@ -56,17 +54,13 @@
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: .2px;
-  /* адаптивний розмір: */
   font-size: clamp(14px, .6vw + 12px, 18px);
-  color: #0f172a;                 /* slate-900 */
+  color: #0f172a;
   word-break: keep-all;
   overflow-wrap: break-word;
 }
 
-/* Невеликі корекції на дуже вузьких екранах */
 @media (max-width: 480px) {
-  .productCard {
-    box-shadow: 0 8px 22px rgba(0, 0, 0, .08);
-  }
+  .productCard { box-shadow: 0 8px 22px rgba(0, 0, 0, .08); }
   .media { min-height: 200px; }
 }

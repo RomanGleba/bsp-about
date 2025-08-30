@@ -1,11 +1,3 @@
-.logo {
-  display: inline-flex;
-  align-items: center;
-  line-height: 0;
-}
-
-.img {
-  display: block;
-  height: auto;
-  max-width: none;
-}
+/* src/ui/logo/Logo.module.scss */
+.logo { display: inline-flex; align-items: center; }
+.img  { display: block; height: auto; }

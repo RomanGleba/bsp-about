@@ -1,28 +1,31 @@
 import React from 'react';
 import s from './Logo.module.scss';
-import logoUrl from '../../assets/logo/bsp.svg';
+import defaultLogo from '@/assets/logo/bsp.svg';
 
-/**
- * @param {object} props
- * @param {number} [props.width=180]
- * @param {number} [props.height=44]
- * @param {boolean} [props.compact]
- * @param {string} [props.className]
- */
-export default function Logo({ width = 180, height = 44, compact = false, className = '' }) {
+export default function Logo({
+                                 src,
+                                 alt = 'BSP Group',
+                                 width = 180,
+                                 height = 44,
+                                 compact = false,
+                                 className = '',
+                                 loading = 'lazy',
+                                 onError,
+                             }) {
+    const w = compact ? Math.round(width / 2) : width;
+    const h = compact ? Math.round(height / 2) : height;
+
     return (
-        <div
-            className={`${s.logo} ${className}`}
-            aria-label="BSP Group"
-            role="img"
-        >
+        <div className={`${s.logo} ${className}`}>
             <img
-                src={logoUrl}
-                alt="BSP Group"
-                width={compact ? width / 2 : width}
-                height={compact ? height / 2 : height}
+                src={src || defaultLogo}
+                alt={alt}
+                width={w}
+                height={h}
                 className={s.img}
-                loading="eager"
+                loading={loading}
+                decoding="async"
+                onError={onError}
             />
         </div>
     );
