@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import s from './LangSwitcher.module.scss';
 
 const OPTIONS = [
-    { value: 'ua', label: <span className={s.opt}>UA</span> },
-    { value: 'en', label: <span className={s.opt}>ENG</span> },
+    { value: 'ua', label: <span className={s.opt}>МОВА</span> },
+    { value: 'en', label: <span className={s.opt}>EN</span> },
 ];
 
 export default function LangSwitcher() {

@@ -9,54 +9,47 @@ import ResponsiveBanner from '@/ui/background/ResponsiveBanner.jsx';
 import Logo from '@/ui/logo/Logo.jsx';
 import s from './Products.module.scss';
 
-const norm = (v) => (v ?? '').toString().trim().toLowerCase();
+// helpers
+const normKey = (v) => (v ?? '').toString().trim().toLowerCase().replace(/\s+/g, '-');
+const hasExt = (s='') => /\.(png|jpe?g|webp|svg)$/i.test(s);
+const isAbs  = (s='') => /^\/|^https?:\/\//i.test(s);
 
-/** ==== МАПА логотипів з assets/brands (Vite/Webpack) ==== */
+// мапа логотипів із src/assets/brands/*
 const logoUrlByKey = (() => {
-    const modules = import.meta.glob('@/assets/brands/*.{png,jpg,jpeg,webp,svg}', {
-        eager: true,
-        as: 'url',
-    });
+    const mods = import.meta.glob('@/assets/brands/*.{png,jpg,jpeg,webp,svg}', { eager: true, as: 'url' });
     const map = {};
-    for (const [path, url] of Object.entries(modules)) {
-        const filename = path.split('/').pop(); // "dasty.png"
-        const key = filename.replace(/\.(png|jpe?g|webp|svg)$/i, '').toLowerCase(); // "dasty"
-        map[key] = url; // хешований URL з assets
+    for (const [path, url] of Object.entries(mods)) {
+        const file = path.split('/').pop();
+        const key = normKey(file.replace(/\.(png|jpe?g|webp|svg)$/i, ''));
+        map[key] = url;
     }
     return map;
 })();
 
-/** ==== Резолвер джерела лого (ключ або прямий шлях) ==== */
-const resolveBrandSrc = (imageField) => {
-    if (!imageField) return '';
+// резолвер src для лого бренду
+const resolveBrandSrc = (brand) => {
+    const keyFromName = normKey(brand.name);
+    const img = (brand.image || '').trim();
 
-    // Якщо вже дано повний шлях/URL із розширенням — повертаємо як є
-    if (
-        imageField.startsWith('/') ||
-        imageField.startsWith('http://') ||
-        imageField.startsWith('https://') ||
-        /\.(png|jpe?g|webp|svg)$/i.test(imageField)
-    ) {
-        return imageField;
+    if (img) {
+        if (!isAbs(img) && !hasExt(img)) {
+            const k = normKey(img);
+            return logoUrlByKey[k] || `/images/brands/${k}.webp`;
+        }
+        return img; // абсолютний шлях або вже з розширенням
     }
-
-    // Інакше це "ключ" — шукаємо в assets-мапі
-    const fromAssets = logoUrlByKey[norm(imageField)];
-    if (fromAssets) return fromAssets;
-
-    // Фолбек на public
-    return `/images/brands/${imageField}.webp`;
+    return logoUrlByKey[keyFromName] || `/images/brands/${keyFromName}.webp`;
 };
 
 export default function Products() {
     const { t } = useTranslation();
-    const items = productsData.products || [];
+    const items = productsData?.products || [];
 
-    // Унікальні бренди з Brends.json (дедуп по name)
+    // унікальні бренди (дедуп за назвою)
     const brands = useMemo(() => {
         const list = (brandsData?.brends || []).map((b) => ({
-            key: norm(b.name),               // "dasty"
-            name: (b.name ?? '').trim(),     // "Dasty"
+            key: normKey(b.name),
+            name: (b.name ?? '').trim(),
             image: b.image || null,
             id: b.id || null,
         }));
@@ -66,111 +59,89 @@ export default function Products() {
     }, [brandsData]);
 
     const [openBrandKey, setOpenBrandKey] = useState(null);
+    const toggleBrand = useCallback((key) => setOpenBrandKey((cur) => (cur === key ? null : key)), []);
 
-    const toggleBrand = useCallback((key) => {
-        setOpenBrandKey((cur) => (cur === key ? null : key));
-    }, []);
-
+    // товари активного бренду
     const productsByOpenBrand = useMemo(() => {
         if (!openBrandKey) return [];
-        return items.filter((p) => norm(p.brand) === openBrandKey);
+        return items.filter((p) => normKey(p.brand) === openBrandKey);
     }, [items, openBrandKey]);
 
     return (
         <section className={s.section}>
             <ResponsiveBanner
-                showAll
                 height="clamp(320px, 52vh, 560px)"
                 overlay="linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.25))"
                 className={s.bannerFull}
                 positionDesktop="50% 32%"
                 positionTablet="50% 40%"
                 positionMobile="50% 48%"
-
-                srcMobileWebp="/images/backgrounds/mobile/fon-mobile.webp"
-                srcMobileJpg="/images/backgrounds/mobile/fon-mobile.jpg"
-
-                srcDesktopWebp="/images/backgrounds/desktop/fon-desktop.webp"
-                srcDesktopJpg="/images/backgrounds/desktop/fon-desktop.jpg"
-
-                fallbackWidth={1920}
-                fallbackHeight={560}
-                alt={t('products.bannerAlt', { defaultValue: 'Корм для улюбленців — BSP Group' })}
             >
-                <h1 className={s.bannerTitle}>{t('products.title', { defaultValue: 'Наша продукція' })}</h1>
-                <p className={s.bannerLead}>
-                    {t('products.lead', { defaultValue: 'Ми імпортуємо та дистриб’юємо якісні товари для ваших улюбленців.' })}
-                </p>
+                <div className={s.bannerContent}>
+                    <h1 className={s.bannerTitle}>
+                        {t('products.title', { defaultValue: 'Наша продукція' })}
+                    </h1>
+                    <p className={s.bannerLead}>
+                        {t('products.lead', { defaultValue: 'Ми імпортуємо та дистриб’юємо якісні товари для ваших улюбленців.' })}
+                    </p>
+                </div>
             </ResponsiveBanner>
-
-
-
-
 
             <div className={s.container}>
                 <Divider orientation="left">
                     {t('brands.all', { defaultValue: 'Бренди' })}
                 </Divider>
 
-                {/* Сітка брендів + інлайн-експандер під активним брендом */}
+                {/* Сітка брендів; під активним просто з’являються товари без “блоку” */}
                 <Row gutter={{ xs: [12, 16], sm: [16, 20], md: [24, 24] }}>
-                    {brands.map((b, i) => (
-                        <React.Fragment key={b.key || b.id || i}>
-                            <Col xs={12} sm={8} lg={6}>
-                                <button
-                                    type="button"
-                                    className={`${s.brandTile} ${openBrandKey === b.key ? s.active : ''}`}
-                                    onClick={() => toggleBrand(b.key)}
-                                    aria-expanded={openBrandKey === b.key}
-                                    aria-controls={`brand-expander-${i}`}
-                                >
-                                    <div className={s.brandLogo} aria-hidden="true">
-                                        {b.image ? (
-                                            <Logo
-                                                src={resolveBrandSrc(b.image)}
-                                                alt={b.name}
-                                                width={56}
-                                                height={56}
-                                                className={s.brandLogoImg}
-                                                loading="lazy"
-                                                onError={(e) => {
-                                                    // якщо fallback на public .webp 404 — пробуємо .png
-                                                    if (e.currentTarget.src.endsWith('.webp')) {
-                                                        e.currentTarget.onerror = null;
-                                                        e.currentTarget.src = `/images/brands/${b.image}.png`;
-                                                    }
-                                                }}
-                                            />
-                                        ) : (
-                                            <span className={s.brandLetter}>{b.name?.[0] || 'B'}</span>
-                                        )}
-                                    </div>
-                                    <div className={s.brandName}>{b.name}</div>
-                                </button>
-                            </Col>
+                    {brands.map((b, i) => {
+                        const logoSrc = resolveBrandSrc(b);
 
-                            {openBrandKey === b.key && (
-                                <Col xs={24}>
-                                    <div
-                                        id={`brand-expander-${i}`}
-                                        className={s.inlineExpander}
-                                        role="region"
-                                        aria-label={`Товари бренду ${b.name}`}
+                        const openThis = () => {
+                            toggleBrand(b.key);
+                        };
+                        const onKey = (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); }
+                        };
+
+                        return (
+                            <React.Fragment key={b.key || b.id || i}>
+                                <Col xs={12} sm={8} lg={6}>
+                                    <button
+                                        type="button"
+                                        className={`${s.brandTile} ${openBrandKey === b.key ? s.active : ''}`}
+                                        onClick={openThis}
+                                        onKeyDown={onKey}
+                                        aria-expanded={openBrandKey === b.key}
+                                        aria-controls={`brand-products-${i}`}
                                     >
-                                        <div className={s.expanderHeader}>
-                      <span>
-                        {t('products.ofBrand', { defaultValue: 'Товари бренду' })}{' '}
-                          <strong>{b.name}</strong>
-                      </span>
-                                            <button
-                                                className={s.expanderClose}
-                                                onClick={() => setOpenBrandKey(null)}
-                                                aria-label={t('common.close', { defaultValue: 'Закрити' })}
-                                            >
-                                                ✕
-                                            </button>
+                                        <div className={s.brandLogo} aria-hidden="true">
+                                            {b.image ? (
+                                                <Logo
+                                                    src={logoSrc}
+                                                    alt={b.name}
+                                                    width={56}
+                                                    height={56}
+                                                    className={s.brandLogoImg}
+                                                    loading="lazy"
+                                                    onError={(e) => {
+                                                        const imgEl = e.currentTarget; imgEl.onerror = null;
+                                                        if (/\/images\/brands\/.+\.webp$/i.test(logoSrc)) { imgEl.src = logoSrc.replace(/\.webp$/i, '.png'); return; }
+                                                        if (/\/images\/brands\/.+\.png$/i.test(logoSrc))  { imgEl.src = logoSrc.replace(/\.png$/i,  '.jpg'); return; }
+                                                        const key = normKey(b.image || b.name);
+                                                        imgEl.src = `/images/brands/${key}.png`;
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span className={s.brandLetter}>{b.name?.[0] || 'B'}</span>
+                                            )}
                                         </div>
+                                        <div className={s.brandName}>{b.name}</div>
+                                    </button>
+                                </Col>
 
+                                {openBrandKey === b.key && (
+                                    <Col xs={24} id={`brand-products-${i}`} className={s.brandProducts}>
                                         {productsByOpenBrand.length === 0 ? (
                                             <div className={s.empty}>
                                                 {t('products.emptyBrand', { defaultValue: 'Поки немає товарів цього бренду.' })}
@@ -184,11 +155,11 @@ export default function Products() {
                                                 ))}
                                             </Row>
                                         )}
-                                    </div>
-                                </Col>
-                            )}
-                        </React.Fragment>
-                    ))}
+                                    </Col>
+                                )}
+                            </React.Fragment>
+                        );
+                    })}
                 </Row>
             </div>
         </section>

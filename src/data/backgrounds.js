@@ -3,23 +3,23 @@ export const backgrounds = {
     home: {
         mobileWebp: "/images/backgrounds/mobile/dogs-mobile.webp",
         mobileJpg:  "/images/backgrounds/mobile/dogs-mobile.jpg",
-        tabletWebp: "/images/backgrounds/tablet/family-dog-tablet.webp",
-        tabletJpg:  "/images/backgrounds/tablet/family-dog-tablet.jpg",
+        tabletWebp: "/images/backgrounds/tablet/family-dogs-tablet.webp",
+        tabletJpg:  "/images/backgrounds/tablet/family-dogs-tablet.jpg",
         desktopWebp:"/images/backgrounds/desktop/dogs-desktop.webp",
         desktopJpg: "/images/backgrounds/desktop/dogs-desktop.jpg",
         alt: "Собака та людина — BSP Group",
     },
     about: {
-        // ✅ mobile: виправили на fura-mobile.webp
+
         mobileWebp: "/images/backgrounds/mobile/fura-mobile.webp",
         // якщо у тебе НЕМає fura-mobile.jpg — тимчасово можна лишити будь-який jpg як fallback
         // краще покласти реальний /images/backgrounds/mobile/fura-mobile.jpg і замінити нижче
-        mobileJpg:  "/images/backgrounds/mobile/only-dog-mobile.jpg",
+        mobileJpg:  "/images/backgrounds/mobile/only-dogs-mobile.jpg",
 
         // tablet: переконайся, що ці файли справді існують у /public/images/backgrounds/tablet/
         // якщо їх нема — або додай, або підстав тимчасово інші (наприклад з desktop)
-        tabletWebp: "/images/backgrounds/tablet/only-dog-tablet.webp",
-        tabletJpg:  "/images/backgrounds/tablet/only-dog-tablet.jpg",
+        tabletWebp: "/images/backgrounds/tablet/only-dogs-tablet.webp",
+        tabletJpg:  "/images/backgrounds/tablet/only-dogs-tablet.jpg",
 
         // ✅ desktop: виправили ім'я файлу та заповнили jpg
         desktopWebp:"/images/backgrounds/desktop/fura-desktop.webp",

@@ -1,33 +1,34 @@
 import React from 'react';
 
 /**
- * Универсальне зображення товару:
- * - якщо imageKey = "ключ" (basename без розширення) → будує responsive WebP з /mobile /tablet /desktop
- * - якщо imageKey = повний шлях/URL (.png/.jpg/.webp/https://...) → рендерить як є
+ * Якщо imageKey = "ключ" → будує WebP з /mobile /table /desktop (public/)
+ * Якщо imageKey = повний шлях/URL → рендерить як є
  */
 export default function ProductImage({
                                          imageKey,
                                          alt = 'Фото товару',
                                          className = '',
-                                         basePath = '/images/products', // де лежать responsive набори (public/)
+                                         basePath = '/images/products',  // public/images/products
                                          loading = 'lazy',
                                          decoding = 'async',
                                          fetchPriority = 'auto',
                                          width,
                                          height,
-                                         single = false,      // true → використовує тільки desktop.webp
-                                         addSuffix = true,    // false → імена без -mobile/-tablet/-desktop
-                                         sizes,               // опціонально: наприклад '(max-width: 768px) 50vw, 25vw'
+                                         single = false,      // true → лише desktop.webp
+                                         addSuffix = true,    // false → без -mobile/-table/-desktop
+                                         sizes,
+                                         tabletDir = 'table', // у тебе папка 'table'
+                                         placeholder = '/images/products/placeholder.png',
                                      }) {
     const raw = String(imageKey || '').trim();
     if (!raw) return null;
 
     const isDirectPath =
         raw.startsWith('/') ||
-        raw.startsWith('http://') || raw.startsWith('https://') ||
+        raw.startsWith('http://') ||
+        raw.startsWith('https://') ||
         /\.(webp|avif|jpe?g|png|gif|svg)$/i.test(raw);
 
-    // Якщо це готовий шлях/URL — просто показуємо як є
     if (isDirectPath) {
         return (
             <img
@@ -45,14 +46,22 @@ export default function ProductImage({
         );
     }
 
-    // Інакше — це "ключ": збираємо responsive WebP
     const key = raw.replace(/\.(webp|avif|jpe?g|png)$/i, '');
     const file = (subdir, suf) =>
         `${basePath}/${subdir}/${key}${addSuffix ? `-${suf}` : ''}.webp`;
 
     const d = file('desktop', 'desktop');
-    const t = single ? d : file('tablet', 'tablet');  // ← tablet, не "table"
+    const t = single ? d : file(tabletDir, tabletDir);
     const m = single ? d : file('mobile', 'mobile');
+
+    const handleError = (imgEl) => {
+        if (!imgEl) return;
+        const cur = imgEl.dataset.fallbackStage || 'webp';
+        const base = d.replace(/\.webp$/i, '');
+        if (cur === 'webp') { imgEl.dataset.fallbackStage = 'png'; imgEl.src = `${base}.png`; return; }
+        if (cur === 'png')  { imgEl.dataset.fallbackStage = 'jpg'; imgEl.src = `${base}.jpg`; return; }
+        imgEl.onerror = null; imgEl.src = placeholder;
+    };
 
     return (
         <picture className={className}>
@@ -68,15 +77,8 @@ export default function ProductImage({
                 width={width}
                 height={height}
                 style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
-                onError={(e) => {
-                    // fallback: .webp → .png → .jpg
-                    const base = d.replace(/\.webp$/i, '');
-                    e.currentTarget.onerror = () => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = `${base}.jpg`;
-                    };
-                    e.currentTarget.src = `${base}.png`;
-                }}
+                data-fallback-stage="webp"
+                onError={(e) => handleError(e.currentTarget)}
             />
         </picture>
     );

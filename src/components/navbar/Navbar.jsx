@@ -86,7 +86,6 @@ export default function Navbar() {
                     {/* тільки на десктопі */}
                     <div className={s.onlyDesktop}>
                         <LangSwitcher />
-                        <InstagramLink className={s.iconBtn} size={22} />
                     </div>
 
                     <Button
@@ -132,7 +131,6 @@ export default function Navbar() {
                 {/* верхній ряд дій: UA/ENG • Instagram • CTA */}
                 <div className={s.sidebarTop}>
                     <LangSwitcher />
-                    <InstagramLink className={s.iconBtn} size={22} />
                     <Button
                         type="primary"
                         shape="round"

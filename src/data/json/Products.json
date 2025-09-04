@@ -1,6 +1,9 @@
 {
   "products": [
-    { "id": "p1", "name": "Dasty Beef 400g", "brand": "Dasty", "image": "Dasty-Beaf" },
-    { "id": "p2", "name": "Dasty Chicken 400g", "brand": "Dasty", "image": "Dasty-banka" }
+    { "id": "p1", "name": "Dasty Beef 10kg",    "brand": "Dasty",  "image": "dasty/dasty-beef" },
+    { "id": "p2", "name": "Dasty Chicken 400g", "brand": "Dasty",  "image": "dasty/dasty-banka" },
+    { "id": "p3", "name": "Fincsi dog 1kg",    "brand": "Fincsi", "image": "fincsi/fincsi-dog-banka" },
+    { "id": "p4", "name": "Fincsi dog 10kg",    "brand": "Fincsi", "image": "fincsi/fincsi-dog-korm" },
+    { "id": "p5", "name": "Fincsi salami 800g",    "brand": "Fincsi", "image": "fincsi/fincsi-dog-salami" }
   ]
 }

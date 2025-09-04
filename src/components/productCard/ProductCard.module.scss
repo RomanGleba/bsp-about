@@ -1,66 +1,85 @@
-/* src/components/productCard/ProductCard.module.scss */
 :root {
-  --card-radius: 16px;
-  --card-shadow: 0 10px 30px rgba(0, 0, 0, .08);
-  --card-border: 1px solid rgba(15, 23, 42, .08);
-  --media-bg: linear-gradient(180deg, #f8fafc 0%, #f3f4f6 100%);
+  --card-radius: 18px;
+  --card-shadow: 0 10px 30px rgba(0,0,0,.08);
+  --card-border: 1px solid rgba(15,23,42,.08);
+
+  /* Як на 2-му скріні: високий світлий блок */
+  --media-bg: linear-gradient(180deg,#f9fafb 0%,#f2f4f7 100%);
+  --media-radius: 16px;
+  --media-pad: clamp(14px, 2vw, 24px);
+
+  /* Співвідношення сторін медіа (висота = 1.1 * ширина) */
+  --media-aspect: 1 / 1.1; /* змінюй на 1/1.2 якщо хочеш ще вищий блок */
 }
 
 .productCard {
-  text-align: center;
+  height: 100%;
   border-radius: var(--card-radius);
-  box-shadow: var(--card-shadow);
   border: var(--card-border);
-  cursor: pointer; /* було default */
-  transition: transform .18s ease, box-shadow .18s ease, outline-color .18s ease;
+  box-shadow: var(--card-shadow);
+  transition: transform .18s ease, box-shadow .18s ease;
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 36px rgba(0, 0, 0, .10);
-  }
-
-  &:focus-visible {
-    outline: 2px solid #16a34a; /* акцентний фокус */
-    outline-offset: 2px;
+    box-shadow: 0 14px 36px rgba(0,0,0,.10);
   }
 }
 
-/* решта без змін ... */
+/* Тіло картки — сітка: медіа + заголовок */
+:global(.ant-card-body) {
+  display: grid;
+  grid-template-rows: auto auto;
+  row-gap: 14px;
+  height: 100%;
+}
+
+/* Світлий контейнер як на макеті */
 .media {
   background: var(--media-bg);
-  border-radius: 12px;
-  padding: clamp(10px, 1.5vw, 16px);
-  margin-bottom: 12px;
-  min-height: clamp(180px, 26vw, 240px);
-
-  .mediaInner {
-    display: grid;
-    place-items: center;
-    height: 100%;
-  }
-
-  :global(picture), :global(img) {
-    max-width: 100%;
-  }
-
-  :global(img) {
-    user-select: none;
-    -webkit-user-drag: none;
-  }
+  border-radius: var(--media-radius);
+  padding: var(--media-pad);
+  aspect-ratio: var(--media-aspect);
+  overflow: hidden;
+  display: grid;
 }
 
+.mediaInner {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Зображення вписується без спотворень */
+.media :global(picture),
+.media :global(img) {
+  width: 100%;
+  height: 100%;
+}
+.media :global(img) {
+  object-fit: contain;            /* вписати */
+  object-position: center bottom; /* як у прикладі — “стоять” на низу */
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Дві строки + фіксована висота під усі назви */
 .title {
   margin: 0;
   font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: .2px;
+  line-height: 1.3;
   font-size: clamp(14px, .6vw + 12px, 18px);
   color: #0f172a;
-  word-break: keep-all;
-  overflow-wrap: break-word;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(1.3em * 2); /* однакова висота під 2 рядки */
 }
 
 @media (max-width: 480px) {
-  .productCard { box-shadow: 0 8px 22px rgba(0, 0, 0, .08); }
-  .media { min-height: 200px; }
+  .productCard { box-shadow: 0 8px 22px rgba(0,0,0,.08); }
+  :root { --media-aspect: 1 / 1.05; } /* трохи нижчий блок на мобайлі */
 }

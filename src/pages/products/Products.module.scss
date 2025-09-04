@@ -40,7 +40,6 @@ $sm: 576px;
   cursor: pointer;
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
   text-align: left;
-
   &:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(0,0,0,.10); }
   &:focus-visible { outline: 2px solid #16a34a; outline-offset: 2px; }
 }
@@ -53,34 +52,8 @@ $sm: 576px;
   img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
 }
 .brandLetter { font-weight: 800; font-size: 18px; color: #0f172a; }
+.brandName { font-weight: 700; color: #0f172a; font-size: clamp(14px, .6vw + 12px, 16px); line-height: 1.2; letter-spacing: .2px; }
 
-.brandName {
-  font-weight: 700; color: #0f172a;
-  font-size: clamp(14px, .6vw + 12px, 16px);
-  line-height: 1.2; letter-spacing: .2px;
-}
-
-/* --- інлайн-експандер під брендом --- */
-.inlineExpander {
-  margin: 10px 0 20px;
-  border: 1px solid rgba(15,23,42,.08);
-  border-radius: 14px;
-  padding: 12px;
-  background: #fff;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, .06);
-  animation: fadeSlideIn .18s ease-out both;
-}
-@keyframes fadeSlideIn { from { opacity: 0; transform: translateY(-6px);} to { opacity: 1; transform: translateY(0);} }
-
-.expanderHeader {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 4px 4px 10px; border-bottom: 1px solid rgba(15,23,42,.06);
-  font-weight: 700; color: #0f172a;
-}
-.expanderClose {
-  border: 0; background: transparent; font-size: 18px; line-height: 1;
-  cursor: pointer; padding: 6px; border-radius: 8px;
-  &:hover { background: rgba(15,23,42,.06); }
-}
-
-.empty { padding: 16px; color: #475569; }
+/* --- товари бренду просто з’являються без контейнера --- */
+.brandProducts { margin: 10px 0 22px; }
+.empty { padding: 6px 2px; color: #475569; }

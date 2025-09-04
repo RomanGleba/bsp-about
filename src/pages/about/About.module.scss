@@ -22,12 +22,15 @@ $xs: 360px;
 .page {
   --header-h: 0px;
 
+  /* глобальна змінна для розміру логотипів у чіпах */
+  --logo-max-h: 60px;             /* ← головний розмір лого */
+
   /* дефолти (десктоп) */
   --hero-shift: 0px;
   --content-shift: 0px;
   --inner-shift: 0px;
-  --container-shift: -50px; /* піднято на 50px на десктопі */
-  --section-shift: -40px;   /* секцію підтягнуто вгору */
+  --container-shift: -50px;       /* піднято на 50px на десктопі */
+  --section-shift: -40px;         /* секцію підтягнуто вгору */
 
   background: $bg;
 }
@@ -76,112 +79,95 @@ $xs: 360px;
 .kicker { font: 700 .95rem/1.2 system-ui; letter-spacing: .14em; text-transform: uppercase; color: $accent; }
 .kickerLine { display: block; margin: 8px auto; width: 68px; height: 3px; border-radius: 2px; background: $accent; }
 
-.title {
-  font-weight: 900; color: $ink;
-  font-size: clamp(2.6rem, 3vw + 1.2rem, 4rem);
-  margin: 12px 0 10px; text-wrap: balance;
-}
-.lead {
-  max-width: 85ch; margin: 0 auto 6px;
-  font-size: clamp(1.12rem, 1vw + 1rem, 1.36rem);
-  color: $ink; opacity: .86;
-}
+.title { font-weight: 900; color: $ink; font-size: clamp(2.6rem, 3vw + 1.2rem, 4rem); margin: 12px 0 10px; text-wrap: balance; }
+.lead { max-width: 85ch; margin: 0 auto 6px; font-size: clamp(1.12rem, 1vw + 1rem, 1.36rem); color: $ink; opacity: .86; }
 .position { color: $ink; opacity: .78; font-size: 1rem; margin-top: 4px; }
 
 /* ===== STATS ===== */
-.stats {
-  margin: 22px auto 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 18px;
-  max-width: 1100px;
-}
-.statItem {
-  background: #fff; border: 1px solid $cardBorder; border-radius: 16px;
-  padding: clamp(16px,2vw,24px); box-shadow: $shadow-md;
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  &:hover { transform: translateY(-3px); border-color: $accent; box-shadow: 0 10px 28px rgba($accent,.18); }
-}
+.stats { margin: 22px auto 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; max-width: 1100px; }
+.statItem { background: #fff; border: 1px solid $cardBorder; border-radius: 16px; padding: clamp(16px,2vw,24px); box-shadow: $shadow-md; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.statItem:hover { transform: translateY(-3px); border-color: $accent; box-shadow: 0 10px 28px rgba($accent,.18); }
 .statValue { font-size: clamp(1.5rem, 1.2vw + 1rem, 1.9rem); font-weight: 900; color: $ink; }
 .statLabel { font-size: 1rem; color: $ink; opacity: .72; }
 
 /* ===== CONTENT ===== */
-.section {
-  /* паддинг зверху: фон секції залишається суцільним (без «білої смуги») */
-  padding: calc(56px + var(--content-shift)) 0 56px;
-  background: #eed7ee;
-  margin-top: var(--section-shift);
-}
-
-.container {
-  max-width: 1200px;
-  margin: var(--container-shift) auto 0; /* зсув контейнера вгору/вниз */
-}
+.section { padding: calc(0px + var(--content-shift)) 0 0px; background: #eed7ee; margin-top: calc(var(--section-shift) - 200px); }
+.container { max-width: 1200px; margin: calc(var(--container-shift) - 50px) auto 0; }
 
 /* блок під героєм */
 .brandsSummary {
   margin-top: calc(var(--content-shift) - 24px);
   background: #fff; border-radius: 18px; border: 1px solid $cardBorder;
   padding: 24px; box-shadow: $shadow-md;
+
+  /* Хочеш ще більші лого — зміни значення тут, напр.: 72px */
+  /* --logo-max-h: 60px;  // локальне перевизначення */
 }
 .h2 { font-weight: 900; margin: 6px 0 10px; color: $ink; }
 .h4 { font-weight: 700; margin: 14px 0 8px; color: $ink; }
 .brandBlock { margin-top: 6px; }
 
-.brandCloud { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 10px; }
+/* === ЧІПИ БРЕНДІВ === */
+.brandCloud { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 12px; }
+
 .brandChip {
   display: inline-flex; align-items: center; justify-content: center;
-  min-height: 40px; min-width: 90px; padding: 8px 12px;
-  background: #fff; border: 1px solid $cardBorder; border-radius: 12px; box-shadow: $shadow-md;
-  font-weight: 600; color: $ink; transition: .2s;
-  &:hover { border-color: $accent; color: $accent-hover; transform: translateY(-2px); box-shadow: 0 12px 28px rgba($accent,.15); }
+  min-height: calc(var(--logo-max-h) + 20px);   /* пропорційно лого */
+  min-width: 110px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid $cardBorder;
+  border-radius: 12px;
+  box-shadow: $shadow-md;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s;
+  cursor: default;
+  &:hover { border-color: $accent; transform: translateY(-2px); box-shadow: 0 12px 28px rgba($accent,.15); }
 }
+
+.brandImg {
+  max-height: var(--logo-max-h);
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 .note { color: $ink; opacity: .7; }
 
 /* ===== TIMELINE ===== */
 .timeline { position: relative; margin-top: 28px; }
-.rail {
-  position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-1px);
-  background: linear-gradient(180deg, rgba($accent,.18), rgba($accent,.06));
-}
+.rail { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-1px); background: linear-gradient(180deg, rgba($accent,.18), rgba($accent,.06)); }
 .card { position: relative; padding: 22px 4px; }
-.pin {
-  position: absolute; left: 50%; top: 36px; width: 12px; height: 12px; border-radius: 50%;
-  background: #fff; border: 3px solid $accent; transform: translate(-50%,-50%);
-  box-shadow: 0 0 0 8px rgba($accent,.10); animation: softGlow 2s ease-out infinite;
-}
-.body {
-  margin: 0 auto; max-width: 880px; background: $card; border: 1px solid $cardBorder; border-radius: 16px;
-  padding: 20px; box-shadow: $shadow-md;
-}
+.pin { position: absolute; left: 50%; top: 36px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid $accent; transform: translate(-50%,-50%); box-shadow: 0 0 0 8px rgba($accent,.10); animation: softGlow 2s ease-out infinite; }
+.body { margin: 0 auto; max-width: 880px; background: $card; border: 1px solid $cardBorder; border-radius: 16px; padding: 20px; box-shadow: $shadow-md; }
 .head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.icon {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 36px; height: 36px; border-radius: 10px; background: $accent; color: #fff; font-size: 18px;
-}
+.icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: $accent; color: #fff; font-size: 18px; }
 .h3 { margin: 0; font-weight: 800; color: $ink; font-size: clamp(1.2rem, .9vw + 1rem, 1.55rem); }
 .text { color: $ink; opacity: .9; font-size: 1.02rem; line-height: 1.66; margin: 6px 0 0; }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 1200px) {
-  .container { width: min(1100px, 92%); }
-}
+@media (max-width: 1200px) { .container { width: min(1100px, 92%); } }
+@media (max-width: 1024px) { .stats { grid-template-columns: repeat(2, 1fr); } }
 
-@media (max-width: 1024px) {
-  .stats { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* ТЕЛЕФОНИ: ПІДНЯТИ КОНТЕЙНЕР НА 40px */
+/* ТЕЛЕФОНИ */
 @media (max-width: $sm) {
   .page {
-    --container-shift: -380px; /* ⬅️ піднято вгору на 40px */
-    --section-shift: 0;       /* не опускаємо секцію, щоб не було «білої смуги» */
+    --container-shift: -380px;
+    --section-shift: 0;
     --inner-shift: 10px;
     --content-shift: 16px;
+
+    /* трохи менші лого на вузьких екранах */
+    --logo-max-h: 48px;
   }
 
   .section { margin-top: 0; padding-top: calc(40px + var(--content-shift)); }
   .stats   { grid-template-columns: 1fr; gap: 14px; }
+
+  .brandChip { min-width: 100px; padding: 10px 14px; }
 }
 
 @media (max-width: 480px) {
@@ -189,10 +175,6 @@ $xs: 360px;
   .lead  { font-size: clamp(1rem, 1.2vw + .95rem, 1.1rem); }
 }
 
-@media (max-width: $xs) { .brandChip { min-width: 72px; padding: 6px 10px; } }
-
-@media (max-width: $md) {
-  .rail { left: 16px; transform: none; }
-  .pin  { left: 16px; transform: translateY(-50%); }
-  .body { margin-left: 36px; }
+@media (max-width: $xs) {
+  .brandChip { min-width: 92px; padding: 8px 12px; }
 }

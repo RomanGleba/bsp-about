@@ -18,14 +18,15 @@ export default function ProductCard({ p, priority = false, onClick }) {
         <Card
             className={s.productCard}
             variant="outlined"
-            styles={{ body: { padding: 16 } }}
             role={onClick ? 'button' : 'group'}
             tabIndex={onClick ? 0 : -1}
             aria-label={p?.name || 'Картка товару'}
             onClick={onClick}
             onKeyDown={onKeyDown}
             hoverable={!!onClick}
+            styles={{ body: { padding: 18 } }}
         >
+            {/* Світлий контейнер під фото — однаковий розмір для всіх */}
             <div className={s.media} aria-hidden="true">
                 <div className={s.mediaInner}>
                     <ProductImage
@@ -34,10 +35,14 @@ export default function ProductCard({ p, priority = false, onClick }) {
                         fetchPriority={priority ? 'high' : 'auto'}
                         loading={priority ? 'eager' : 'lazy'}
                         sizes="(max-width: 576px) 50vw, (max-width: 992px) 33vw, 25vw"
+                        single={p.single === true}
+                        basePath="/images/products"
+                        tabletDir="table"
                     />
                 </div>
             </div>
 
+            {/* Назва у два рядки з однаковою висотою */}
             <Title level={5} className={s.title}>{p.name}</Title>
         </Card>
     );

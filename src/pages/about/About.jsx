@@ -16,6 +16,38 @@ import s from './About.module.scss';
 
 const { Title, Paragraph, Text } = Typography;
 
+/* ========== helpers for brand logos ========== */
+const normBrandKey = (v = '') =>
+    v.toString().trim().toLowerCase().replace(/\s+/g, '-');
+
+/* Підтягуємо всі лого з src/assets/brands/* як URL-и (Vite) */
+const brandAssetsMap = (() => {
+    const mods = import.meta.glob('@/assets/brands/*.{png,jpg,jpeg,webp,svg}', {
+        eager: true,
+        as: 'url',
+    });
+    const map = {};
+    for (const [path, url] of Object.entries(mods)) {
+        const file = path.split('/').pop();                   // e.g. natures-protection.png
+        const base = file.replace(/\.(png|jpe?g|webp|svg)$/i, '');
+        const dash  = normBrandKey(base);                     // natures-protection
+        const tight = dash.replace(/-/g, '');                 // naturesprotection
+        map[dash]  = url;
+        map[tight] = url;
+    }
+    return map;
+})();
+
+/** src для логотипа за назвою бренду */
+const resolveBrandLogo = (name = '') => {
+    const dash  = normBrandKey(name);
+    const tight = dash.replace(/-/g, '');
+    return brandAssetsMap[dash]
+        || brandAssetsMap[tight]
+        || `/images/brands/${dash}.webp`; // fallback у public (onError → .png → .jpg)
+};
+/* ============================================= */
+
 const Para = React.memo(({ children, className }) =>
     children ? <Paragraph className={className || s.text}>{children}</Paragraph> : null
 );
@@ -34,6 +66,7 @@ const StatStrip = React.memo(({ stats = [] }) => {
     );
 });
 
+/* Чіпи брендів: показуємо ЛОГО замість тексту */
 const BrandChips = React.memo(({ title, names = [] }) => {
     if (!names?.length) return null;
     return (
@@ -41,7 +74,20 @@ const BrandChips = React.memo(({ title, names = [] }) => {
             <Title level={4} className={s.h4}>{title}</Title>
             <div className={s.brandCloud} role="list">
                 {names.map((name) => (
-                    <div className={s.brandChip} key={name} role="listitem">{name}</div>
+                    <div className={s.brandChip} key={name} role="listitem" aria-label={name}>
+                        <img
+                            className={s.brandImg}
+                            src={resolveBrandLogo(name)}
+                            alt={name}
+                            loading="lazy"
+                            decoding="async"
+                            onError={(e) => {
+                                const img = e.currentTarget; img.onerror = null;
+                                if (/\.webp$/i.test(img.src)) { img.src = img.src.replace(/\.webp$/i, '.png'); return; }
+                                if (/\.png$/i.test(img.src))  { img.src = img.src.replace(/\.png$/i,  '.jpg');  return; }
+                            }}
+                        />
+                    </div>
                 ))}
             </div>
         </div>
@@ -97,7 +143,7 @@ export default function About() {
     return (
         <main
             className={s.page}
-            /* ⬇️ тепер 200px */
+            /* головна змінна розміру лого; хочеш ще — підніми число */
             style={{ '--hero-shift': '200px', '--content-shift': '200px' }}
         >
             {/* HERO з фоном */}
@@ -123,6 +169,8 @@ export default function About() {
                         <Title level={2} id="brands-summary-title" className={s.h2}>
                             {labels?.brands_summary_title || 'Бренди та партнерства'}
                         </Title>
+
+                        {/* тут відмальовуються лого у “чіпах” */}
                         <BrandChips title={labels?.own || 'Власні ТМ'} names={own} />
                         <BrandChips title={labels?.ua || 'Ексклюзивні ТМ в Україні'} names={ua} />
                         <BrandChips title={labels?.regions || 'Ексклюзивні ТМ у регіонах'} names={regions} />

@@ -1,6 +1,8 @@
 {
   "brends": [
-    { "id": "brend1", "name": "Dasty", "image": "/images/products/desktop/fon-korm.webp" },
-    { "id": "brend2", "name": "Dasty", "image": "Dasty-banka" }
+    { "id": "brend1", "name": "Dasty",  "image": "dasty-fon" },
+    { "id": "brend2", "name": "Spiky",  "image": "spiky" },
+    { "id": "brend3", "name": "Fincsi", "image": "fincsi-fon" },
+    { "id": "brend4", "name": "Miss kiss", "image": "misskis" }
   ]
 }
