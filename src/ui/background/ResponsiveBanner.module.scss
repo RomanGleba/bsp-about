@@ -1,85 +1,63 @@
-/* src/ui/background/ResponsiveBanner.module.scss */
-.wrap {
+.banner {
   position: relative;
-  display: grid;
-  place-items: center;
+  width: 100%;
+  height: var(--banner-h, clamp(280px, 50vh, 560px));
+  border-radius: 18px;
   overflow: hidden;
-  color: #fff;
+  isolation: isolate;
+  background: #f3f5f7;
+  box-shadow: 0 24px 60px rgba(2,6,23,.12);
 }
 
-.inner {
-  position: relative;
-  z-index: 2;
-  text-align: center;
-  padding-inline: clamp(16px, 4vw, 48px);
-  padding-block: clamp(16px, 6vh, 48px);
+.picture, .img, .overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.img {
+  display: block;
+  object-fit: cover;
+  object-position: var(--img-pos-desktop, 50% 30%);
+  transform: translateZ(0);
+}
+
+/* tablet */
+@media (max-width: 1199px) {
+  .img { object-position: var(--img-pos-tablet, 50% 38%); }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  .banner { height: clamp(220px, 42vh, 420px); border-radius: 12px; }
+  .img { object-position: var(--img-pos-mobile, 50% 45%); }
 }
 
 .overlay {
-  position: absolute;
-  inset: 0;
+  background: var(--overlay, linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.20)));
   z-index: 1;
-  pointer-events: none;
 }
 
-/* ===== Теми (фони) ===== */
-
-/* Головна */
-.bg-hero {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 46%;
-
-  background-image: image-set(
-                  url('/images/backgrounds/mobile/fon-mobile.webp') type('image/jpeg') 1x,
-                  url('/images/backgrounds/mobile/fon-mobile@2x.jpg') type('image/jpeg') 2x
-  );
-
-  @media (min-width: 768px) {
-    background-position: 50% 40%;
-    background-image: image-set(
-                    url('/images/backgrounds/desktop/fon-desktop.jpg') type('image/jpeg') 1x,
-                    url('/images/backgrounds/desktop/fon-desktop@2x.jpg') type('image/jpeg') 2x
-    );
-  }
-
-  @media (min-width: 1200px) {
-    background-position: 50% 32%;
-    background-image: image-set(
-                    url('/images/backgrounds/desktop/fon-desktop.webp') type('image/webp') 1x,
-                    url('/images/backgrounds/desktop/fon-desktop@2x.webp') type('image/webp') 2x,
-                    url('/images/backgrounds/desktop/fon-desktop.jpg') type('image/jpeg') 1x,
-                    url('/images/backgrounds/desktop/fon-desktop@2x.jpg') type('image/jpeg') 2x
-    );
-  }
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  color: #fff;
 }
 
-/* Продукти */
-.bg-products {
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: 50% 50%;
+.content :where(h1, h2, h3) {
+  margin: 0 0 8px;
+  font-weight: 900;
+  text-shadow: 0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+}
 
-  background-image: image-set(
-                  url('/images/backgrounds/mobile/korms.jpg') type('image/jpeg') 1x,
-                  url('/images/backgrounds/mobile/korms@2x.jpg') type('image/jpeg') 2x
-  );
-
-  @media (min-width: 768px) {
-    background-position: 50% 42%;
-    background-image: image-set(
-                    url('/images/backgrounds/desktop/korm.jpg') type('image/jpeg') 1x,
-                    url('/images/backgrounds/desktop/korm@2x.jpg') type('image/jpeg') 2x
-    );
-  }
-
-  @media (min-width: 1200px) {
-    background-position: 50% 34%;
-    background-image: image-set(
-                    url('/images/backgrounds/desktop/korm.webp') type('image/webp') 1x,
-                    url('/images/backgrounds/desktop/korm@2x.webp') type('image/webp') 2x,
-                    url('/images/backgrounds/desktop/korm.jpg') type('image/jpeg') 1x,
-                    url('/images/backgrounds/desktop/korm@2x.jpg') type('image/jpeg') 2x
-    );
-  }
+.content p {
+  margin: 0;
+  max-width: 70ch;
+  text-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
