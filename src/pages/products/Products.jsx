@@ -89,7 +89,7 @@ export default function Products() {
 
             <div className={s.container}>
                 <Divider orientation="left">
-                    {t('brands.all', { defaultValue: 'Бренди' })}
+                    {t('brands.all', { defaultValue: 'Продукція' })}
                 </Divider>
 
                 {/* Сітка брендів; під активним просто з’являються товари без “блоку” */}

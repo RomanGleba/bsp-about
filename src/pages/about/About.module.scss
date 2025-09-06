@@ -21,16 +21,13 @@ $xs: 360px;
 /* ===== PAGE ===== */
 .page {
   --header-h: 0px;
+  --logo-max-h: 60px;
 
-  /* глобальна змінна для розміру логотипів у чіпах */
-  --logo-max-h: 60px;             /* ← головний розмір лого */
-
-  /* дефолти (десктоп) */
   --hero-shift: 0px;
   --content-shift: 0px;
   --inner-shift: 0px;
-  --container-shift: -50px;       /* піднято на 50px на десктопі */
-  --section-shift: -40px;         /* секцію підтягнуто вгору */
+  --container-shift: -50px;
+  --section-shift: -40px;
 
   background: $bg;
 }
@@ -57,10 +54,7 @@ $xs: 360px;
   @supports not (min-height: 100dvh) { min-height: 100vh; }
 }
 
-/* фоновий градієнт поверх фото */
 .heroBg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba($ink,.06), rgba($ink,.03)); }
-
-/* контент поверх */
 .heroGlass { position: relative; z-index: 1; width: 100%; display: grid; place-items: center; padding-inline: 16px; }
 
 .heroInner {
@@ -85,7 +79,16 @@ $xs: 360px;
 
 /* ===== STATS ===== */
 .stats { margin: 22px auto 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; max-width: 1100px; }
-.statItem { background: #fff; border: 1px solid $cardBorder; border-radius: 16px; padding: clamp(16px,2vw,24px); box-shadow: $shadow-md; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.statItem {
+  background:
+          linear-gradient(to bottom, rgba(0,0,0,.03), rgba(0,0,0,.03)),
+          #fff;
+  border: 1px solid $cardBorder;
+  border-radius: 16px;
+  padding: clamp(16px,2vw,24px);
+  box-shadow: $shadow-md;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
 .statItem:hover { transform: translateY(-3px); border-color: $accent; box-shadow: 0 10px 28px rgba($accent,.18); }
 .statValue { font-size: clamp(1.5rem, 1.2vw + 1rem, 1.9rem); font-weight: 900; color: $ink; }
 .statLabel { font-size: 1rem; color: $ink; opacity: .72; }
@@ -94,14 +97,10 @@ $xs: 360px;
 .section { padding: calc(0px + var(--content-shift)) 0 0px; background: #eed7ee; margin-top: calc(var(--section-shift) - 200px); }
 .container { max-width: 1200px; margin: calc(var(--container-shift) - 50px) auto 0; }
 
-/* блок під героєм */
 .brandsSummary {
   margin-top: calc(var(--content-shift) - 24px);
   background: #fff; border-radius: 18px; border: 1px solid $cardBorder;
   padding: 24px; box-shadow: $shadow-md;
-
-  /* Хочеш ще більші лого — зміни значення тут, напр.: 72px */
-  /* --logo-max-h: 60px;  // локальне перевизначення */
 }
 .h2 { font-weight: 900; margin: 6px 0 10px; color: $ink; }
 .h4 { font-weight: 700; margin: 14px 0 8px; color: $ink; }
@@ -112,16 +111,25 @@ $xs: 360px;
 
 .brandChip {
   display: inline-flex; align-items: center; justify-content: center;
-  min-height: calc(var(--logo-max-h) + 20px);   /* пропорційно лого */
+  min-height: calc(var(--logo-max-h) + 20px);
   min-width: 110px;
   padding: 12px 16px;
-  background: #fff;
+
+  background:
+          linear-gradient(to bottom, rgba(0,0,0,.06), rgba(0,0,0,.06)),
+          #fff;
+
   border: 1px solid $cardBorder;
   border-radius: 12px;
   box-shadow: $shadow-md;
-  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
   cursor: default;
-  &:hover { border-color: $accent; transform: translateY(-2px); box-shadow: 0 12px 28px rgba($accent,.15); }
+
+  &:hover {
+    border-color: $accent;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba($accent,.15);
+  }
 }
 
 .brandImg {
@@ -142,7 +150,18 @@ $xs: 360px;
 .rail { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; transform: translateX(-1px); background: linear-gradient(180deg, rgba($accent,.18), rgba($accent,.06)); }
 .card { position: relative; padding: 22px 4px; }
 .pin { position: absolute; left: 50%; top: 36px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid $accent; transform: translate(-50%,-50%); box-shadow: 0 0 0 8px rgba($accent,.10); animation: softGlow 2s ease-out infinite; }
-.body { margin: 0 auto; max-width: 880px; background: $card; border: 1px solid $cardBorder; border-radius: 16px; padding: 20px; box-shadow: $shadow-md; }
+
+.body {
+  margin: 0 auto; max-width: 880px;
+  background:
+          linear-gradient(to bottom, rgba(0,0,0,.04), rgba(0,0,0,.04)),
+          $card;
+  border: 1px solid $cardBorder;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: $shadow-md;
+}
+
 .head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .icon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 10px; background: $accent; color: #fff; font-size: 18px; }
 .h3 { margin: 0; font-weight: 800; color: $ink; font-size: clamp(1.2rem, .9vw + 1rem, 1.55rem); }
@@ -159,8 +178,6 @@ $xs: 360px;
     --section-shift: 0;
     --inner-shift: 10px;
     --content-shift: 16px;
-
-    /* трохи менші лого на вузьких екранах */
     --logo-max-h: 48px;
   }
 

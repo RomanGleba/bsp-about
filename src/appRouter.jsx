@@ -3,7 +3,7 @@ import React, { Suspense, lazy } from 'react';
 import App from './App.jsx';
 import Products from './pages/products/Products.jsx';
 import Contacts from "@/pages/contact/Contact.jsx";
-
+import PartnersPage from "@/pages/partners/Partners.jsx";
 // Ліниві сторінки
 const Home  = lazy(() => import('./pages/home/Home.jsx'));
 const About = lazy(() => import('./pages/about/About.jsx'));
@@ -19,6 +19,7 @@ export const appRouter = createBrowserRouter([
             { path: 'about', element: <Suspense fallback={Fallback}><About /></Suspense> },
             { path: 'products', element: <Suspense fallback={Fallback}><Products /></Suspense> },
             { path: 'contacts', element: <Contacts /> },
+            { path: 'partners', element: <PartnersPage /> },
         ],
     },
 ]);

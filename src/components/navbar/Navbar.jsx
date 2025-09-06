@@ -4,7 +4,6 @@ import { Button } from 'antd';
 import { PhoneOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import LangSwitcher from '../lang/LangSwitcher';
-import InstagramLink from '../../ui/logo/socialNetwork/InstagramLink.jsx';
 import Logo from '../../ui/logo/Logo.jsx';
 import s from './Navbar.module.scss';
 
@@ -20,6 +19,7 @@ export default function Navbar() {
         () => [
             { key: '/',         label: t('header.home'),     to: '/' },
             { key: '/products', label: t('header.products'), to: '/products' },
+            {key: '/partners', label: t('header.partners'), to: '/partners' },
         ],
         [t],
     );
