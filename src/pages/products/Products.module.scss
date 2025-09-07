@@ -16,7 +16,7 @@ $sm: 576px;
 .bannerTitle { font-weight: 900; font-size: clamp(2rem, 2.2vw + 1rem, 3.4rem); line-height: 1.12; }
 .bannerLead  { max-width: 880px; margin: 6px auto 0; font-size: clamp(1.05rem, .8vw + .9rem, 1.28rem); }
 
-/* === Картка бренду — тепер вертикальний стек === */
+/* === Картка бренду — вертикальний стек === */
 .brandTile {
   position: relative;
   width: 100%;
@@ -46,7 +46,7 @@ $sm: 576px;
 .brandMedia {
   grid-area: media;
   width: 100%;
-  height: 120px;                 /* <-- ЗМІНЮЙ ВИСОТУ ТУТ */
+  height: 120px;                 /* базова висота */
   border-radius: 16px;
   overflow: hidden;
   background: #f8fafc;
@@ -126,12 +126,40 @@ $sm: 576px;
 .showAllBtn { background: #16a34a; color: #fff; border-color: #16a34a; }
 .collapseBtn { background: #f8fafc; }
 
-/* адаптив */
+/* ===== адаптив ===== */
+
+/* планшет і нижче */
+@media (max-width: $md) {
+  .brandMedia { height: 110px; }
+}
+
+/* телефони */
 @media (max-width: $sm) {
   .container { padding: 0 16px; }
-  .brandTile { gap: 10px 12px; padding: 14px 16px; border-radius: 16px; }
-  .brandMedia { height: 100px; border-radius: 14px; } /* нижча картинка на мобілці */
+
+  .brandTile {
+    gap: 10px 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+  }
+
+  .brandMedia {
+    height: 100px;              /* нижча картинка на мобілці */
+    border-radius: 14px;
+  }
+
   .brandName { font-size: clamp(15px, 1.5vw + 13px, 17px); }
   .countPill { padding: 5px 9px; font-size: 12px; }
   .chev { font-size: 20px; }
+
+  .loadMoreBtn, .showAllBtn, .collapseBtn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+/* вимикаємо hover-анімації на тач-девайсах */
+@media (hover: none) {
+  .brandTile:hover { transform: none; box-shadow: 0 14px 34px rgba(0,0,0,.08); }
+  .brandTile:hover .chev { transform: none; color: #94a3b8; }
 }
