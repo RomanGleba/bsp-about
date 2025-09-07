@@ -6,15 +6,14 @@ import productsData from '@/data/json/Products.json';
 import brandsData from '@/data/json/Brends.json';
 import ProductCard from '@/components/productCard/ProductCard.jsx';
 import ResponsiveBanner from '@/ui/background/ResponsiveBanner.jsx';
-import Logo from '@/ui/logo/Logo.jsx';
 import s from './Products.module.scss';
 
-// helpers
+// ===== helpers =====
 const normKey = (v) => (v ?? '').toString().trim().toLowerCase().replace(/\s+/g, '-');
 const hasExt = (s='') => /\.(png|jpe?g|webp|svg)$/i.test(s);
 const isAbs  = (s='') => /^\/|^https?:\/\//i.test(s);
 
-// мапа логотипів із src/assets/brands/*
+// мапа картинок/логотипів із src/assets/brands/*
 const logoUrlByKey = (() => {
     const mods = import.meta.glob('@/assets/brands/*.{png,jpg,jpeg,webp,svg}', { eager: true, as: 'url' });
     const map = {};
@@ -26,7 +25,7 @@ const logoUrlByKey = (() => {
     return map;
 })();
 
-// резолвер src для лого бренду
+// резолвер src для зображення бренду
 const resolveBrandSrc = (brand) => {
     const keyFromName = normKey(brand.name);
     const img = (brand.image || '').trim();
@@ -41,9 +40,21 @@ const resolveBrandSrc = (brand) => {
     return logoUrlByKey[keyFromName] || `/images/brands/${keyFromName}.webp`;
 };
 
+const VISIBLE_STEP = 8;
+
 export default function Products() {
     const { t } = useTranslation();
     const items = productsData?.products || [];
+
+    // карта кількості товарів на бренд
+    const countByBrand = useMemo(() => {
+        const m = new Map();
+        for (const p of items) {
+            const k = normKey(p.brand);
+            m.set(k, (m.get(k) || 0) + 1);
+        }
+        return m;
+    }, [items]);
 
     // унікальні бренди (дедуп за назвою)
     const brands = useMemo(() => {
@@ -59,7 +70,17 @@ export default function Products() {
     }, [brandsData]);
 
     const [openBrandKey, setOpenBrandKey] = useState(null);
-    const toggleBrand = useCallback((key) => setOpenBrandKey((cur) => (cur === key ? null : key)), []);
+    const [visibleByBrand, setVisibleByBrand] = useState({}); // { [brandKey]: number }
+
+    const toggleBrand = useCallback((key) => {
+        setOpenBrandKey((cur) => {
+            const next = cur === key ? null : key;
+            if (next) {
+                setVisibleByBrand((m) => (m[next] ? m : { ...m, [next]: VISIBLE_STEP }));
+            }
+            return next;
+        });
+    }, []);
 
     // товари активного бренду
     const productsByOpenBrand = useMemo(() => {
@@ -67,10 +88,27 @@ export default function Products() {
         return items.filter((p) => normKey(p.brand) === openBrandKey);
     }, [items, openBrandKey]);
 
+    const visibleCount = visibleByBrand[openBrandKey] ?? 0;
+    const visibleProducts = openBrandKey
+        ? productsByOpenBrand.slice(0, visibleCount || VISIBLE_STEP)
+        : [];
+
+    const showMore = () =>
+        setVisibleByBrand((m) => ({
+            ...m,
+            [openBrandKey]: Math.min((m[openBrandKey] || VISIBLE_STEP) + VISIBLE_STEP, productsByOpenBrand.length),
+        }));
+
+    const showAll = () =>
+        setVisibleByBrand((m) => ({ ...m, [openBrandKey]: productsByOpenBrand.length }));
+
+    const collapse = () =>
+        setVisibleByBrand((m) => ({ ...m, [openBrandKey]: VISIBLE_STEP }));
+
     return (
         <section className={s.section}>
             <ResponsiveBanner
-                height="clamp(320px, 52vh, 560px)"
+                height="clamp(340px, 56vh, 600px)"
                 overlay="linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.25))"
                 className={s.bannerFull}
                 positionDesktop="50% 32%"
@@ -92,68 +130,86 @@ export default function Products() {
                     {t('brands.all', { defaultValue: 'Продукція' })}
                 </Divider>
 
-                {/* Сітка брендів; під активним просто з’являються товари без “блоку” */}
-                <Row gutter={{ xs: [12, 16], sm: [16, 20], md: [24, 24] }}>
+                {/* Сітка брендів */}
+                <Row gutter={{ xs: [12, 16], sm: [18, 22], md: [28, 28] }}>
                     {brands.map((b, i) => {
-                        const logoSrc = resolveBrandSrc(b);
+                        const imgSrc = resolveBrandSrc(b);
+                        const count = countByBrand.get(b.key) || 0;
+                        const open = openBrandKey === b.key;
 
-                        const openThis = () => {
-                            toggleBrand(b.key);
-                        };
-                        const onKey = (e) => {
-                            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); }
-                        };
+                        const openThis = () => toggleBrand(b.key);
+                        const onKey = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); } };
 
                         return (
                             <React.Fragment key={b.key || b.id || i}>
                                 <Col xs={12} sm={8} lg={6}>
                                     <button
                                         type="button"
-                                        className={`${s.brandTile} ${openBrandKey === b.key ? s.active : ''}`}
+                                        className={`${s.brandTile} ${open ? s.active : ''}`}
                                         onClick={openThis}
                                         onKeyDown={onKey}
-                                        aria-expanded={openBrandKey === b.key}
+                                        aria-expanded={open}
                                         aria-controls={`brand-products-${i}`}
+                                        aria-label={`Відкрити бренд ${b.name}. ${count ? `Товарів: ${count}.` : 'Немає товарів.'}`}
                                     >
-                                        <div className={s.brandLogo} aria-hidden="true">
-                                            {b.image ? (
-                                                <Logo
-                                                    src={logoSrc}
-                                                    alt={b.name}
-                                                    width={56}
-                                                    height={56}
-                                                    className={s.brandLogoImg}
-                                                    loading="lazy"
-                                                    onError={(e) => {
-                                                        const imgEl = e.currentTarget; imgEl.onerror = null;
-                                                        if (/\/images\/brands\/.+\.webp$/i.test(logoSrc)) { imgEl.src = logoSrc.replace(/\.webp$/i, '.png'); return; }
-                                                        if (/\/images\/brands\/.+\.png$/i.test(logoSrc))  { imgEl.src = logoSrc.replace(/\.png$/i,  '.jpg'); return; }
-                                                        const key = normKey(b.image || b.name);
-                                                        imgEl.src = `/images/brands/${key}.png`;
-                                                    }}
-                                                />
-                                            ) : (
-                                                <span className={s.brandLetter}>{b.name?.[0] || 'B'}</span>
-                                            )}
+                                        {/* 1) Зображення зверху */}
+                                        <div className={s.brandMedia} aria-hidden="true">
+                                            <img
+                                                src={imgSrc}
+                                                alt={b.name}
+                                                className={s.brandMediaImg}
+                                                loading="lazy"
+                                                decoding="async"
+                                                onError={(e) => {
+                                                    const el = e.currentTarget; el.onerror = null;
+                                                    if (/\.webp($|\?)/i.test(el.src)) { el.src = el.src.replace(/\.webp/i, '.png'); return; }
+                                                    if (/\.png($|\?)/i.test(el.src))  { el.src = el.src.replace(/\.png/i,  '.jpg'); return; }
+                                                    const k = normKey(b.image || b.name);
+                                                    el.src = `/images/brands/${k}.jpg`;
+                                                }}
+                                            />
                                         </div>
-                                        <div className={s.brandName}>{b.name}</div>
+
+                                        {/* 2) Назва + пілл нижче */}
+                                        <div className={s.brandInfo}>
+                                            <div className={s.brandNameRow}>
+                                                <div className={s.brandName}>{b.name}</div>
+                                                {!!count && <span className={s.countPill}>Дивитися ({count})</span>}
+                                            </div>
+                                            {/* 3) Стрілка справа від назви */}
+                                            <span className={s.chev} aria-hidden>›</span>
+                                        </div>
                                     </button>
                                 </Col>
 
-                                {openBrandKey === b.key && (
-                                    <Col xs={24} id={`brand-products-${i}`} className={s.brandProducts}>
-                                        {productsByOpenBrand.length === 0 ? (
-                                            <div className={s.empty}>
-                                                {t('products.emptyBrand', { defaultValue: 'Поки немає товарів цього бренду.' })}
+                                {/* Список товарів бренду */}
+                                {open && (
+                                    <Col xs={24} className={`${s.brandProducts} ${s.expanded}`} id={`brand-products-${i}`}>
+                                        <Row gutter={{ xs: [12, 16], sm: [18, 22], md: [28, 28] }}>
+                                            {visibleProducts.map((p, k) => (
+                                                <Col key={p.id || p.image || k} xs={12} sm={8} lg={6}>
+                                                    <ProductCard p={p} priority={k < 4} />
+                                                </Col>
+                                            ))}
+                                        </Row>
+
+                                        {productsByOpenBrand.length > visibleProducts.length && (
+                                            <div className={s.loadMoreWrap}>
+                                                <button type="button" className={s.loadMoreBtn} onClick={showMore}>
+                                                    Показати ще
+                                                </button>
+                                                <button type="button" className={s.showAllBtn} onClick={showAll}>
+                                                    Показати всі
+                                                </button>
                                             </div>
-                                        ) : (
-                                            <Row gutter={{ xs: [12, 16], sm: [16, 20], md: [24, 24] }}>
-                                                {productsByOpenBrand.map((p, k) => (
-                                                    <Col key={p.id || p.image || k} xs={12} sm={8} lg={6}>
-                                                        <ProductCard p={p} priority={k < 4} />
-                                                    </Col>
-                                                ))}
-                                            </Row>
+                                        )}
+
+                                        {visibleProducts.length > VISIBLE_STEP && (
+                                            <div className={s.collapseWrap}>
+                                                <button type="button" className={s.collapseBtn} onClick={collapse}>
+                                                    Згорнути
+                                                </button>
+                                            </div>
                                         )}
                                     </Col>
                                 )}

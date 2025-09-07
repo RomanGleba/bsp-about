@@ -30,9 +30,9 @@ const brandAssetsMap = (() => {
     for (const [path, url] of Object.entries(mods)) {
         const file = path.split('/').pop();                   // e.g. natures-protection.png
         const base = file.replace(/\.(png|jpe?g|webp|svg)$/i, '');
-        const dash  = normBrandKey(base);                     // natures-protection
+        const dash = normBrandKey(base);                      // natures-protection
         const tight = dash.replace(/-/g, '');                 // naturesprotection
-        map[dash]  = url;
+        map[dash] = url;
         map[tight] = url;
     }
     return map;
@@ -40,13 +40,12 @@ const brandAssetsMap = (() => {
 
 /** src для логотипа за назвою бренду */
 const resolveBrandLogo = (name = '') => {
-    const dash  = normBrandKey(name);
+    const dash = normBrandKey(name);
     const tight = dash.replace(/-/g, '');
     return brandAssetsMap[dash]
         || brandAssetsMap[tight]
         || `/images/brands/${dash}.webp`; // fallback у public (onError → .png → .jpg)
 };
-/* ============================================= */
 
 const Para = React.memo(({ children, className }) =>
     children ? <Paragraph className={className || s.text}>{children}</Paragraph> : null
@@ -66,15 +65,21 @@ const StatStrip = React.memo(({ stats = [] }) => {
     );
 });
 
-/* Чіпи брендів: показуємо ЛОГО замість тексту */
-const BrandChips = React.memo(({ title, names = [] }) => {
+/* ====== БРЕНДИ: чиста сітка логотипів з округленням ====== */
+const BrandGrid = React.memo(({ title, names = [] }) => {
     if (!names?.length) return null;
     return (
         <div className={s.brandBlock}>
             <Title level={4} className={s.h4}>{title}</Title>
-            <div className={s.brandCloud} role="list">
+
+            <ul className={s.brandGrid} role="list">
                 {names.map((name) => (
-                    <div className={s.brandChip} key={name} role="listitem" aria-label={name}>
+                    <li
+                        className={`${s.brandLogo} ${s[normBrandKey(name)] || ''}`}
+                        key={name}
+                        role="listitem"
+                        aria-label={name}
+                    >
                         <img
                             className={s.brandImg}
                             src={resolveBrandLogo(name)}
@@ -84,12 +89,12 @@ const BrandChips = React.memo(({ title, names = [] }) => {
                             onError={(e) => {
                                 const img = e.currentTarget; img.onerror = null;
                                 if (/\.webp$/i.test(img.src)) { img.src = img.src.replace(/\.webp$/i, '.png'); return; }
-                                if (/\.png$/i.test(img.src))  { img.src = img.src.replace(/\.png$/i,  '.jpg');  return; }
+                                if (/\.png$/i.test(img.src))  { img.src = img.src.replace(/\.png$/i, '.jpg'); return; }
                             }}
                         />
-                    </div>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
     );
 });
@@ -102,21 +107,21 @@ export default function About() {
         return lang.startsWith('en') ? (aboutEN || {}) : (aboutUA || {});
     }, [i18n.language]);
 
-    const title    = about?.title || '';
-    const lead     = about?.lead || '';
-    const slogan   = about?.slogan || '';
+    const title = about?.title || '';
+    const lead = about?.lead || '';
+    const slogan = about?.slogan || '';
     const position = about?.position || '';
 
-    const stats    = about?.stats || [];
-    const sec      = about?.sections || {};
-    const labels   = sec?.labels || {};
-    const tt       = sec?.titles || {};
+    const stats = about?.stats || [];
+    const sec = about?.sections || {};
+    const labels = sec?.labels || {};
+    const tt = sec?.titles || {};
 
-    const brands   = about?.brands || {};
-    const own      = brands?.own || [];
-    const ua       = brands?.exclusive_ukraine || [];
-    const regions  = brands?.exclusive_region || [];
-    const note     = brands?.distributed_note;
+    const brands = about?.brands || {};
+    const own = brands?.own || [];
+    const ua = brands?.exclusive_ukraine || [];
+    const regions = brands?.exclusive_region || [];
+    const note = brands?.distributed_note;
 
     const growthText =
         sec?.brands_intro ||
@@ -126,11 +131,11 @@ export default function About() {
 
     const blocks = [
         sec?.history && { key: 'history', title: tt?.history, icon: <HistoryOutlined />, text: sec.history },
-        growthText   && { key: 'growth',  title: tt?.growth,  icon: <RocketOutlined />,  text: growthText },
+        growthText && { key: 'growth', title: tt?.growth, icon: <RocketOutlined />, text: growthText },
         regions.length > 0 && { key: 'brands', title: tt?.brands, icon: <TagsOutlined />, text: sec.exclusive_region },
         sec?.distribution && { key: 'distribution', title: tt?.distribution, icon: <TagsOutlined />, text: sec.distribution },
-        sec?.logistics &&    { key: 'logistics',    title: tt?.logistics,    icon: <CarOutlined />,    text: sec.logistics },
-        sec?.quality &&      { key: 'quality',      title: tt?.quality,      icon: <SafetyOutlined />, text: sec.quality },
+        sec?.logistics && { key: 'logistics', title: tt?.logistics, icon: <CarOutlined />, text: sec.logistics },
+        sec?.quality && { key: 'quality', title: tt?.quality, icon: <SafetyOutlined />, text: sec.quality },
         (sec?.gratitude_partners || sec?.gratitude_army || sec?.patriotism || sec?.promise || sec?.position) && {
             key: 'gratitude',
             title: tt?.gratitude,
@@ -143,7 +148,7 @@ export default function About() {
     return (
         <main
             className={s.page}
-            /* головна змінна розміру лого; хочеш ще — підніми число */
+            /* головна змінна розміру лого; хочеш більше — підніми число */
             style={{ '--hero-shift': '200px', '--content-shift': '200px' }}
         >
             {/* HERO з фоном */}
@@ -165,15 +170,15 @@ export default function About() {
             {/* CONTENT */}
             <section className={s.section}>
                 <div className={s.container}>
-                    <section className={s.brandsSummary} aria-labelledby="brands-summary-title">
+                    {/* ВЕЛИКИЙ CARD-БЛОК ІЗ УСІМА БРЕНДАМИ */}
+                    <section className={`${s.brandsSummary} ${s.brandsSummaryCard}`} aria-labelledby="brands-summary-title">
                         <Title level={2} id="brands-summary-title" className={s.h2}>
                             {labels?.brands_summary_title || 'Бренди та партнерства'}
                         </Title>
 
-                        {/* тут відмальовуються лого у “чіпах” */}
-                        <BrandChips title={labels?.own || 'Власні ТМ'} names={own} />
-                        <BrandChips title={labels?.ua || 'Ексклюзивні ТМ в Україні'} names={ua} />
-                        <BrandChips title={labels?.regions || 'Ексклюзивні ТМ у регіонах'} names={regions} />
+                        <BrandGrid title={labels?.own || 'Власні ТМ'} names={own} />
+                        <BrandGrid title={labels?.ua || 'Ексклюзивні ТМ в Україні'} names={ua} />
+                        <BrandGrid title={labels?.regions || 'Ексклюзивні ТМ у регіонах'} names={regions} />
                         {note && <Para className={s.note}>{note}</Para>}
                     </section>
 

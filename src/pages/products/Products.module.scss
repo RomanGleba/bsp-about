@@ -1,59 +1,137 @@
 $md: 768px;
 $sm: 576px;
 
-.section { padding-bottom: 60px; background: #fff; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+.section { padding-bottom: 72px; background: #fff; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 20px; }
 
 /* HERO */
 .bannerFull {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   width: 100vw;
-  margin-top: 12px;
-  margin-bottom: 32px;
-  padding-left: max(0px, env(safe-area-inset-left));
-  padding-right: max(0px, env(safe-area-inset-right));
+  margin-top: 14px;
+  margin-bottom: 36px;
 }
-.bannerContent { position: relative; z-index: 2; text-align: center; max-width: 960px; margin: 0 auto; padding: clamp(24px, 5vw, 64px) clamp(16px, 4vw, 32px); color: #fff; }
-.bannerTitle { margin: 0 0 10px; color: #fff !important; font-weight: 800; font-size: clamp(1.75rem, 2vw + 1rem, 3rem); line-height: 1.15; text-shadow: 0 18px 40px rgba(0,0,0,.35), 0 4px 12px rgba(0,0,0,.25); }
-.bannerLead  { margin: 0 auto 18px; max-width: 820px; color: rgba(255,255,255,.96); font-size: clamp(0.95rem, .6vw + 1rem, 1.2rem); line-height: 1.65; text-shadow: 0 10px 26px rgba(0,0,0,.3), 0 2px 8px rgba(0,0,0,.22); }
+.bannerContent { text-align: center; max-width: 1080px; margin: 0 auto; color: #fff; }
+.bannerTitle { font-weight: 900; font-size: clamp(2rem, 2.2vw + 1rem, 3.4rem); line-height: 1.12; }
+.bannerLead  { max-width: 880px; margin: 6px auto 0; font-size: clamp(1.05rem, .8vw + .9rem, 1.28rem); }
 
-@media (max-width: $md) {
-  .section { padding-bottom: 44px; }
-  .container { padding: 0 12px; }
-  .bannerFull { margin-top: 8px; margin-bottom: 24px; }
-  .bannerContent { padding: clamp(20px, 5vw, 36px) clamp(14px, 4vw, 24px); }
-}
-
-/* --- бренд-тайли --- */
+/* === Картка бренду — тепер вертикальний стек === */
 .brandTile {
+  position: relative;
   width: 100%;
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr auto;           /* info | chevron (нижній ряд) */
+  grid-template-rows: auto auto;             /* верхній ряд = media, нижній = info */
+  grid-template-areas:
+    "media media"
+    "info  chev";
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid rgba(15,23,42,.08);
-  border-radius: 14px;
+  gap: 12px 16px;
+  padding: 16px 18px;
+  border: 2px solid rgba(15,23,42,.08);
+  border-radius: 18px;
   background: #fff;
-  box-shadow: 0 10px 28px rgba(0,0,0,.06);
+  box-shadow: 0 14px 34px rgba(0,0,0,.08);
   cursor: pointer;
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-  text-align: left;
-  &:hover { transform: translateY(-2px); box-shadow: 0 14px 36px rgba(0,0,0,.10); }
-  &:focus-visible { outline: 2px solid #16a34a; outline-offset: 2px; }
-}
-.active { border-color: rgba(22,163,74,.45); }
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease;
 
-.brandLogo {
-  width: 56px; height: 56px; border-radius: 12px;
-  display: grid; place-items: center; overflow: hidden;
-  background: linear-gradient(180deg,#f8fafc 0%, #f3f4f6 100%);
-  img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  &:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+  &:active { transform: translateY(0) scale(.995); }
+  &:focus-visible { outline: 3px solid rgba(22,163,74,.7); outline-offset: 3px; }
 }
-.brandLetter { font-weight: 800; font-size: 18px; color: #0f172a; }
-.brandName { font-weight: 700; color: #0f172a; font-size: clamp(14px, .6vw + 12px, 16px); line-height: 1.2; letter-spacing: .2px; }
+.active { border-color: #16a34a; box-shadow: 0 14px 36px rgba(22,163,74,.14); }
 
-/* --- товари бренду просто з’являються без контейнера --- */
-.brandProducts { margin: 10px 0 22px; }
-.empty { padding: 6px 2px; color: #475569; }
+/* верхній ряд — зображення */
+.brandMedia {
+  grid-area: media;
+  width: 100%;
+  height: 120px;                 /* <-- ЗМІНЮЙ ВИСОТУ ТУТ */
+  border-radius: 16px;
+  overflow: hidden;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(15,23,42,.05);
+}
+.brandMediaImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;           /* cover — якщо треба без полів */
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* нижній ряд — назва + пілл зліва, стрілка справа */
+.brandInfo { grid-area: info; display: flex; align-items: center; min-width: 0; }
+.brandNameRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.brandName {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: clamp(16px, .7vw + 14px, 18px);
+  line-height: 1.18;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.countPill {
+  padding: 6px 10px;
+  border-radius: 9999px;
+  background: rgba(2, 122, 72, .12);
+  color: #065f46;
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* стрілка справа від назви */
+.chev {
+  grid-area: chev;
+  font-size: 22px;
+  line-height: 1;
+  color: #94a3b8;
+  transform: translateX(0);
+  transition: transform .15s ease, color .15s ease;
+}
+.brandTile:hover .chev { transform: translateX(3px); color: #0f172a; }
+.active .chev { color: #16a34a; transform: translateX(3px); }
+
+/* товари бренду */
+.brandProducts { margin: 16px 0 26px; }
+.expanded { display: block; }
+
+/* кнопки */
+.loadMoreWrap, .collapseWrap {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.loadMoreBtn, .showAllBtn, .collapseBtn {
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+}
+.showAllBtn { background: #16a34a; color: #fff; border-color: #16a34a; }
+.collapseBtn { background: #f8fafc; }
+
+/* адаптив */
+@media (max-width: $sm) {
+  .container { padding: 0 16px; }
+  .brandTile { gap: 10px 12px; padding: 14px 16px; border-radius: 16px; }
+  .brandMedia { height: 100px; border-radius: 14px; } /* нижча картинка на мобілці */
+  .brandName { font-size: clamp(15px, 1.5vw + 13px, 17px); }
+  .countPill { padding: 5px 9px; font-size: 12px; }
+  .chev { font-size: 20px; }
+}

@@ -2,11 +2,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import React, { Suspense, lazy } from 'react';
 import App from './App.jsx';
 import Products from './pages/products/Products.jsx';
-import Contacts from "@/pages/contact/Contact.jsx";
-import PartnersPage from "@/pages/partners/Partners.jsx";
-// Ліниві сторінки
-const Home  = lazy(() => import('./pages/home/Home.jsx'));
-const About = lazy(() => import('./pages/about/About.jsx'));
+import PartnersPage from './pages/partners/Partners.jsx';
+
+const Home     = lazy(() => import('./pages/home/Home.jsx'));
+const About    = lazy(() => import('./pages/about/About.jsx'));
+const Contacts = lazy(() => import('./pages/contact/Contact.jsx'));
 
 const Fallback = <div style={{ padding: 24 }} />;
 
@@ -17,8 +17,8 @@ export const appRouter = createBrowserRouter([
         children: [
             { index: true, element: <Suspense fallback={Fallback}><Home /></Suspense> },
             { path: 'about', element: <Suspense fallback={Fallback}><About /></Suspense> },
-            { path: 'products', element: <Suspense fallback={Fallback}><Products /></Suspense> },
-            { path: 'contacts', element: <Contacts /> },
+            { path: 'products', element: <Products /> },
+            { path: 'contacts', element: <Suspense fallback={Fallback}><Contacts /></Suspense> },
             { path: 'partners', element: <PartnersPage /> },
         ],
     },
