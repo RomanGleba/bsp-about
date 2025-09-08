@@ -1,0 +1,62 @@
+.fullscreen {
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f9fafc;
+  text-align: center;
+  padding: 20px;
+}
+
+.icon {
+  position: relative;
+  font-size: 72px;
+  color: #555;
+  margin-bottom: 16px;
+
+  .close {
+    position: absolute;
+    right: -10px;
+    bottom: 0;
+    font-size: 28px;
+    color: red;
+  }
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1f1f1f;
+}
+
+.subtitle {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 480px) {
+  .icon {
+    font-size: 56px;
+
+    .close {
+      font-size: 22px;
+      right: -8px;
+    }
+  }
+
+  .title {
+    font-size: 20px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+  }
+}

@@ -21,8 +21,8 @@ $sm: 576px;
   position: relative;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr auto;           /* info | chevron (нижній ряд) */
-  grid-template-rows: auto auto;             /* верхній ряд = media, нижній = info */
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
   grid-template-areas:
     "media media"
     "info  chev";
@@ -46,7 +46,7 @@ $sm: 576px;
 .brandMedia {
   grid-area: media;
   width: 100%;
-  height: 120px;                 /* базова висота */
+  height: 120px;
   border-radius: 16px;
   overflow: hidden;
   background: #f8fafc;
@@ -58,37 +58,40 @@ $sm: 576px;
 .brandMediaImg {
   width: 100%;
   height: 100%;
-  object-fit: contain;           /* cover — якщо треба без полів */
+  object-fit: contain;
   display: block;
   -webkit-user-drag: none;
   user-select: none;
 }
 
-/* нижній ряд — назва + пілл зліва, стрілка справа */
+/* нижній ряд — назва + пілл + стрілка */
 .brandInfo { grid-area: info; display: flex; align-items: center; min-width: 0; }
 .brandNameRow {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap; /* дозволяємо перенос пілла під назву */
 }
 .brandName {
   font-weight: 800;
   color: #0f172a;
   font-size: clamp(16px, .7vw + 14px, 18px);
   line-height: 1.18;
-  white-space: nowrap;
+  white-space: nowrap;   /* на широких екранах — один ряд */
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .countPill {
   padding: 6px 10px;
   border-radius: 9999px;
-  background: rgba(2, 122, 72, .12);
+  background: rgba(2,122,72,.12);
   color: #065f46;
   font-weight: 800;
   font-size: 13px;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 /* стрілка справа від назви */
@@ -137,25 +140,22 @@ $sm: 576px;
 @media (max-width: $sm) {
   .container { padding: 0 16px; }
 
-  .brandTile {
-    gap: 10px 12px;
-    padding: 14px 16px;
-    border-radius: 16px;
+  .brandTile { gap: 10px 12px; padding: 14px 16px; border-radius: 16px; }
+  .brandMedia { height: 100px; border-radius: 14px; }
+
+  /* назва бренду на мобілках — завжди видима (до 2 рядків) */
+  .brandName {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 
-  .brandMedia {
-    height: 100px;              /* нижча картинка на мобілці */
-    border-radius: 14px;
-  }
-
-  .brandName { font-size: clamp(15px, 1.5vw + 13px, 17px); }
+  .brandNameRow { gap: 8px; }
   .countPill { padding: 5px 9px; font-size: 12px; }
   .chev { font-size: 20px; }
 
-  .loadMoreBtn, .showAllBtn, .collapseBtn {
-    padding: 12px 16px;
-    font-size: 14px;
-  }
+  .loadMoreBtn, .showAllBtn, .collapseBtn { padding: 12px 16px; font-size: 14px; }
 }
 
 /* вимикаємо hover-анімації на тач-девайсах */

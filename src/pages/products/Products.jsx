@@ -35,7 +35,7 @@ const resolveBrandSrc = (brand) => {
             const k = normKey(img);
             return logoUrlByKey[k] || `/images/brands/${k}.webp`;
         }
-        return img; // абсолютний шлях або вже з розширенням
+        return img;
     }
     return logoUrlByKey[keyFromName] || `/images/brands/${keyFromName}.webp`;
 };
@@ -75,9 +75,7 @@ export default function Products() {
     const toggleBrand = useCallback((key) => {
         setOpenBrandKey((cur) => {
             const next = cur === key ? null : key;
-            if (next) {
-                setVisibleByBrand((m) => (m[next] ? m : { ...m, [next]: VISIBLE_STEP }));
-            }
+            if (next) setVisibleByBrand((m) => (m[next] ? m : { ...m, [next]: VISIBLE_STEP }));
             return next;
         });
     }, []);
@@ -88,12 +86,22 @@ export default function Products() {
         return items.filter((p) => normKey(p.brand) === openBrandKey);
     }, [items, openBrandKey]);
 
-    const visibleCount     = visibleByBrand[openBrandKey] ?? 0;
-    const visibleProducts  = openBrandKey ? productsByOpenBrand.slice(0, visibleCount || VISIBLE_STEP) : [];
+    const visibleCount    = visibleByBrand[openBrandKey] ?? 0;
+    const visibleProducts = openBrandKey
+        ? productsByOpenBrand.slice(0, visibleCount || VISIBLE_STEP)
+        : [];
 
-    const showMore  = () => setVisibleByBrand((m) => ({ ...m, [openBrandKey]: Math.min((m[openBrandKey] || VISIBLE_STEP) + VISIBLE_STEP, productsByOpenBrand.length) }));
-    const showAll   = () => setVisibleByBrand((m) => ({ ...m, [openBrandKey]: productsByOpenBrand.length }));
-    const collapse  = () => setVisibleByBrand((m) => ({ ...m, [openBrandKey]: VISIBLE_STEP }));
+    const showMore = () =>
+        setVisibleByBrand((m) => ({
+            ...m,
+            [openBrandKey]: Math.min((m[openBrandKey] || VISIBLE_STEP) + VISIBLE_STEP, productsByOpenBrand.length),
+        }));
+
+    const showAll = () =>
+        setVisibleByBrand((m) => ({ ...m, [openBrandKey]: productsByOpenBrand.length }));
+
+    const collapse = () =>
+        setVisibleByBrand((m) => ({ ...m, [openBrandKey]: VISIBLE_STEP }));
 
     return (
         <section className={s.section}>
@@ -124,7 +132,7 @@ export default function Products() {
                 <Row
                     gutter={[
                         { xs: 12, sm: 18, md: 28 }, // горизонтальний
-                        { xs: 16, sm: 22, md: 28 }  // вертикальний
+                        { xs: 16, sm: 22, md: 28 }, // вертикальний
                     ]}
                 >
                     {brands.map((b, i) => {
@@ -133,12 +141,14 @@ export default function Products() {
                         const open   = openBrandKey === b.key;
 
                         const openThis = () => toggleBrand(b.key);
-                        const onKey = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); } };
+                        const onKey = (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openThis(); }
+                        };
 
                         return (
                             <React.Fragment key={b.key || b.id || i}>
-                                {/* 1 у рядок на xs, 2 на sm, 3 на md, 4 на lg */}
-                                <Col xs={24} sm={12} md={8} lg={6}>
+                                {/* 2 в ряд на xs/sm, 3 на md, 4 на lg */}
+                                <Col xs={12} sm={12} md={8} lg={6}>
                                     <button
                                         type="button"
                                         className={`${s.brandTile} ${open ? s.active : ''}`}
@@ -148,8 +158,7 @@ export default function Products() {
                                         aria-controls={`brand-products-${i}`}
                                         aria-label={`Відкрити бренд ${b.name}. ${count ? `Товарів: ${count}.` : 'Немає товарів.'}`}
                                     >
-                                        {/* 1) Зображення зверху */}
-                                        <div className={s.brandMedia} aria-hidden="true">
+                                        <div className={s.brandMedia} aria-hidden={true}>
                                             <img
                                                 src={imgSrc}
                                                 alt={b.name}
@@ -166,19 +175,16 @@ export default function Products() {
                                             />
                                         </div>
 
-                                        {/* 2) Назва + пілл нижче */}
                                         <div className={s.brandInfo}>
                                             <div className={s.brandNameRow}>
-                                                <div className={s.brandName}>{b.name}</div>
-                                                {!!count && <span className={s.countPill}>Дивитися ({count})</span>}
+                                                <div className={s.brandName} title={b.name}>{b.name}</div>
+                                                {count > 0 && <span className={s.countPill}>Дивитися ({count})</span>}
                                             </div>
-                                            {/* 3) Стрілка справа від назви */}
-                                            <span className={s.chev} aria-hidden>›</span>
+                                            <span className={s.chev} aria-hidden="true">›</span>
                                         </div>
                                     </button>
                                 </Col>
 
-                                {/* Список товарів бренду */}
                                 {open && (
                                     <Col xs={24} className={`${s.brandProducts} ${s.expanded}`} id={`brand-products-${i}`}>
                                         <Row gutter={[{ xs: 12, sm: 18, md: 28 }, { xs: 16, sm: 22, md: 28 }]}>
@@ -191,20 +197,14 @@ export default function Products() {
 
                                         {productsByOpenBrand.length > visibleProducts.length && (
                                             <div className={s.loadMoreWrap}>
-                                                <button type="button" className={s.loadMoreBtn} onClick={showMore}>
-                                                    Показати ще
-                                                </button>
-                                                <button type="button" className={s.showAllBtn} onClick={showAll}>
-                                                    Показати всі
-                                                </button>
+                                                <button type="button" className={s.loadMoreBtn} onClick={showMore}>Показати ще</button>
+                                                <button type="button" className={s.showAllBtn}  onClick={showAll}>Показати всі</button>
                                             </div>
                                         )}
 
                                         {visibleProducts.length > VISIBLE_STEP && (
                                             <div className={s.collapseWrap}>
-                                                <button type="button" className={s.collapseBtn} onClick={collapse}>
-                                                    Згорнути
-                                                </button>
+                                                <button type="button" className={s.collapseBtn} onClick={collapse}>Згорнути</button>
                                             </div>
                                         )}
                                     </Col>
